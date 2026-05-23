@@ -1,0 +1,14 @@
+# RegRails demo queries — one per line; the demo runner consults the
+# guardrail for each. Each line is the *user-facing* query (what a student,
+# faculty member, vendor, or first responder would actually ask). The demo
+# script constructs the ConsultationRequest from the structured metadata
+# below the query when running with --all.
+#
+# Format: <id> | <query>
+1 | What's Jane Doe's GPA?
+2 | I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.
+3 | What's our basketball team roster?
+4 | For our annual program evaluation, can I get aggregate graduation rates by ethnicity?
+5 | There's a credible shooting threat against the school. Give me the home address of every student in homeroom 204 right now.
+6 | I'm a parent — what disclosures of my kid's records have been made this year?
+7 | My buddy at State U wants me to forward the transcripts I received for our research collaboration.

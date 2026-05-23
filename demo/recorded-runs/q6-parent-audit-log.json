@@ -1,0 +1,40 @@
+{
+  "scenario_id": "q6-parent-audit-log",
+  "title": "Parent inspecting the disclosure record",
+  "query": "I'm a parent \u2014 what disclosures of my kid's records have been made this year?",
+  "consultation": {
+    "query": "I'm a parent \u2014 what disclosures of my kid's records have been made this year?",
+    "requester_role": "parent",
+    "purpose": "audit_log_inspection",
+    "data_requested": [
+      "disclosure_log"
+    ],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": false,
+    "aggregate_or_de_identified": false
+  },
+  "decision": {
+    "id": "06dce63b-115b-4a1b-9890-abc479292070",
+    "query": "I'm a parent \u2014 what disclosures of my kid's records have been made this year?",
+    "timestamp": "2026-05-23T06:31:33.477414Z",
+    "matched_rules": [
+      "FERPA-99.30-1",
+      "FERPA-99.30-2",
+      "FERPA-99.32-A1",
+      "FERPA-99.32-A5"
+    ],
+    "outcome": "allow",
+    "llm_response": "Allowed under 34 CFR \u00a7 99.32(c)(1).\nParents and eligible students may inspect the record of disclosures the agency is required to maintain under \u00a7 99.32(a)(1).",
+    "citations_emitted": [
+      "34-CFR-99.32"
+    ],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "advisor_reply": "You are authorized to receive a list of disclosures about your child's educational records this year. Per our standard practice, we can provide you with our school's disclosure log upon request. Please visit our student services office or submit a written request, and we'll process this for you promptly.\n\n[Advisor follow-up note: Log this disclosure request in our FERPA tracking system and prepare a comprehensive but redacted disclosure report.]",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-05-23T06:31:36.601154+00:00"
+}

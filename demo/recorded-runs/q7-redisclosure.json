@@ -1,0 +1,41 @@
+{
+  "scenario_id": "q7-redisclosure",
+  "title": "Forwarding received records \u2014 \u00a799.33(a)(1) block",
+  "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
+  "consultation": {
+    "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
+    "requester_role": "third_party",
+    "purpose": "redisclosure",
+    "data_requested": [
+      "transcript"
+    ],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": true,
+    "aggregate_or_de_identified": false
+  },
+  "decision": {
+    "id": "46015469-4ab0-4846-8827-d0e3f752e1a7",
+    "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
+    "timestamp": "2026-05-23T06:31:36.605176Z",
+    "matched_rules": [
+      "FERPA-99.30-1",
+      "FERPA-99.30-2",
+      "FERPA-99.32-A1",
+      "FERPA-99.33-A1",
+      "FERPA-99.33-C"
+    ],
+    "outcome": "block",
+    "llm_response": "Blocked under 34 CFR \u00a7 99.33(a)(1).\nA party that receives PII from an education record cannot redisclose it to any other party without prior consent of the parent or eligible student. Obtain written consent or use one of the \u00a7 99.33(c) carve-outs.",
+    "citations_emitted": [
+      "34-CFR-99.33"
+    ],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "advisor_reply": "I apologize, but I cannot help you forward these transcripts. Under FERPA \u00a799.33, student educational records cannot be shared with third parties without specific written consent from the student. Your research collaboration does not automatically grant permission to redistribute these documents. If you need to share these materials, the student whose transcripts you have must provide explicit written authorization.",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-05-23T06:31:39.628512+00:00"
+}

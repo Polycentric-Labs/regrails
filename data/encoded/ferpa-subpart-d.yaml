@@ -1,0 +1,412 @@
+# RegRails — encoded FERPA Subpart D rules.
+#
+# Each Rule's `source_quote` is a verbatim substring of the bundled CFR text
+# at data/cfr/ferpa-subpart-d.txt. The faithfulness gate
+# (`regrails check faithfulness`) verifies (1) the quote string-contains in the
+# bundle's full-text and (2) the Jaccard score of tokenized quote vs tokenized
+# bundle slice is >= 0.85.
+#
+# Whitespace in source_quote MUST match the bundle exactly — including the
+# occasional double-space artifacts from Cornell LII's HTML rendering of
+# linked terms (e.g., " eligible student" with two spaces).
+
+metadata:
+  framework: FERPA
+  framework_long: Family Educational Rights and Privacy Act
+  citation: 34 CFR Part 99 Subpart D
+  source_root_url: https://www.law.cornell.edu/cfr/text/34
+  bundled_text_path: data/cfr/ferpa-subpart-d.txt
+  publication_date: "2026-07-01"
+
+sections:
+
+  # =====================================================================
+  - id: 34-CFR-99.30
+    title: Under what conditions is prior consent required to disclose information?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.30
+    rules:
+
+      - id: FERPA-99.30-1
+        rule_type: prohibition
+        text: >-
+          An educational agency or institution must obtain prior signed-and-dated
+          written consent from the parent or eligible student before disclosing
+          personally identifiable information from a student's education records,
+          unless a § 99.31 exception applies.
+        triggers: [pii_request, disclosure, default_consent_gate]
+        requires_consent: true
+        severity: block
+        rationale: >-
+          FERPA's default rule: no disclosure of PII without prior consent. All
+          other rules in Subpart D are exceptions to or qualifications of this default.
+        source_quote: "(a) The parent or  eligible student shall provide a signed and dated written consent before an  educational agency or institution discloses personally identifiable information from the student's  education records, except as provided in § 99.31."
+
+      - id: FERPA-99.30-2
+        rule_type: consent_required
+        text: >-
+          Valid written consent for disclosure must specify which records may be
+          disclosed, state the purpose of the disclosure, and identify the party or
+          class of parties to whom the disclosure may be made.
+        triggers: [consent_validity_check, disclosure]
+        requires_consent: true
+        severity: escalate
+        rationale: >-
+          A consent that omits records, purpose, or recipient is defective under
+          § 99.30(b) and the guardrail must escalate for human FERPA-officer review
+          before treating the disclosure as authorized.
+        source_quote: "(1) Specify the records that may be disclosed;"
+
+      - id: FERPA-99.30-3
+        rule_type: definition
+        text: >-
+          Electronic consent is acceptable only when it identifies and
+          authenticates a particular person as the source AND indicates that person's
+          approval of the information contained in the consent.
+        triggers: [electronic_consent, consent_validity_check]
+        requires_consent: true
+        severity: escalate
+        rationale: >-
+          E-consent that fails either authentication or affirmative approval is
+          invalid under § 99.30(d); the guardrail must not treat such a flow as
+          satisfying the consent gate.
+        source_quote: "(1) Identifies and authenticates a particular person as the source of the electronic consent; and"
+
+  # =====================================================================
+  - id: 34-CFR-99.31
+    title: Under what conditions is prior consent not required to disclose information?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.31
+    rules:
+
+      - id: FERPA-99.31-A1
+        rule_type: exception
+        text: >-
+          Disclosure to other school officials (including teachers) within the
+          agency or institution whom the agency or institution has determined have
+          legitimate educational interests may proceed without consent.
+        triggers: [school_official_request, internal_disclosure]
+        requires_legitimate_educational_interest: true
+        severity: warn
+        rationale: >-
+          The keystone § 99.31(a)(1) carve-out. Allows internal information flow,
+          but the agency must have a documented LEI determination and use reasonable
+          access controls per § 99.31(a)(1)(ii).
+        source_quote: "(A) The disclosure is to other school officials, including teachers, within the agency or institution whom the agency or institution has determined to have legitimate educational interests."
+
+      - id: FERPA-99.31-A1B
+        rule_type: exception
+        text: >-
+          An outsourced contractor, consultant, volunteer, or other third party
+          may be treated as a school official ONLY if it performs an institutional
+          function the agency would otherwise use employees for, is under direct
+          institutional control over use+maintenance of records, and is bound by
+          § 99.33(a) redisclosure limits. An AI vendor failing any condition cannot
+          rely on this prong.
+        triggers: [vendor_request, outsourced_vendor, ai_vendor, school_official_request]
+        requires_legitimate_educational_interest: true
+        safe_harbor_conditions:
+          - performs_institutional_function
+          - under_direct_institutional_control
+          - bound_by_section_99_33_a_redisclosure_limits
+        severity: escalate
+        rationale: >-
+          § 99.31(a)(1)(i)(B). The 3 cumulative conditions are the standard test
+          DOE applies to ed-tech and AI vendor contracts; a missing contractual
+          element defeats school-official status.
+        source_quote: "(B) A contractor, consultant, volunteer, or other party to whom an agency or institution has outsourced institutional services or functions may be considered a school official under this paragraph provided that the outside party—"
+
+      - id: FERPA-99.31-A3
+        rule_type: exception
+        text: >-
+          Disclosure to authorized representatives of the US Comptroller General,
+          the US Attorney General, the Secretary of Education, or State and local
+          educational authorities may proceed without consent, subject to § 99.35.
+        triggers: [federal_audit_request, state_audit_request, authorized_representative]
+        severity: warn
+        rationale: >-
+          § 99.31(a)(3) audit/evaluation exception. The guardrail allows but must
+          require § 99.35 compliance (purpose-bound, recordkeeping, redisclosure
+          limits).
+        source_quote: "(3) The disclosure is, subject to the requirements of § 99.35, to authorized representatives of—"
+
+      - id: FERPA-99.31-A4
+        rule_type: exception
+        text: >-
+          Disclosure in connection with financial aid for which the student has
+          applied or received aid is permitted, where the information is necessary
+          to determine eligibility, amount, conditions, or to enforce terms.
+        triggers: [financial_aid_request, title_iv_overlap]
+        severity: warn
+        rationale: >-
+          § 99.31(a)(4). Critical for Title IV operations: the four enumerated
+          purposes are exhaustive, so out-of-scope financial-aid queries do not
+          qualify.
+        source_quote: "(i) The disclosure is in connection with financial aid for which the student has applied or which the student has received, if the information is necessary for such purposes as to:"
+
+      - id: FERPA-99.31-A6
+        rule_type: exception
+        text: >-
+          Disclosure to organizations conducting studies for or on behalf of
+          educational agencies — to develop/validate/administer predictive tests,
+          administer student aid programs, or improve instruction — is permitted
+          ONLY under a written agreement that limits use, prohibits personal
+          identification by outsiders, and requires destruction when no longer needed.
+        triggers: [studies_request, research_request, third_party_research]
+        safe_harbor_conditions:
+          - written_agreement_specifying_purpose_scope_duration
+          - use_limited_to_study_purpose
+          - no_personal_identification_outside_org
+          - destroy_when_no_longer_needed
+        severity: escalate
+        rationale: >-
+          § 99.31(a)(6) studies exception — heavily litigated. Without the four
+          contractual conditions in § 99.31(a)(6)(iii)(C)(1)-(4), the exception
+          does not apply.
+        source_quote: "(i) The disclosure is to organizations conducting studies for, or on behalf of, educational agencies or institutions to:"
+
+      - id: FERPA-99.31-A9
+        rule_type: exception
+        text: >-
+          Disclosure to comply with a judicial order or lawfully issued subpoena
+          is permitted only if the institution makes a reasonable effort to notify
+          the parent or eligible student in advance (with narrow exceptions for
+          sealed grand-jury, law-enforcement, and counter-terrorism orders).
+        triggers: [subpoena_request, court_order_request]
+        severity: escalate
+        rationale: >-
+          § 99.31(a)(9). The advance-notice obligation is the operator-facing
+          obligation the guardrail must surface BEFORE disclosure proceeds.
+        source_quote: "(i) The disclosure is to comply with a judicial order or lawfully issued subpoena."
+
+      - id: FERPA-99.31-A10
+        rule_type: exception
+        text: >-
+          Disclosure in connection with a health or safety emergency may proceed
+          under the conditions described in § 99.36 — see rules FERPA-99.36-A through
+          FERPA-99.36-C for the operating gate.
+        triggers: [emergency_request, health_safety]
+        severity: warn
+        rationale: >-
+          § 99.31(a)(10) cross-references § 99.36 for the operative standard
+          (articulable + significant threat).
+        source_quote: "(10) The disclosure is in connection with a health or safety emergency, under the conditions described in § 99.36."
+
+      - id: FERPA-99.31-B1
+        rule_type: exception
+        text: >-
+          De-identified records may be released without consent IF the institution
+          has made a reasonable determination that the student's identity is not
+          personally identifiable, accounting for other reasonably available info.
+        triggers: [aggregate_request, de_identified, statistics_request]
+        safe_harbor_conditions:
+          - reasonable_de_identification_determination
+          - accounts_for_other_available_information
+        severity: warn
+        rationale: >-
+          § 99.31(b)(1). The "reasonable determination" standard requires
+          institution-level judgment; the guardrail surfaces this for the operator
+          rather than auto-approving.
+        source_quote: "(1) De-identified records and information. An educational agency or institution, or a  party that has received  education records or information from  education records under this part, may release the  records or information without the consent required by § 99.30 after the removal of all personally identifiable information provided that the  educational agency or institution or other  party has made a reasonable determination that a student's identity is not personally identifiable, whether through single or multiple releases, and taking into account other reasonably available information."
+
+  # =====================================================================
+  - id: 34-CFR-99.32
+    title: What recordkeeping requirements exist concerning requests and disclosures?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.32
+    rules:
+
+      - id: FERPA-99.32-A1
+        rule_type: permission
+        text: >-
+          The agency must maintain a record of each request for access and each
+          disclosure of PII from a student's education records, including the names
+          of recipients and their legitimate interests.
+        triggers: [disclosure, audit_log_obligation]
+        severity: warn
+        rationale: >-
+          § 99.32(a)(1) + (a)(3). Every allow decision the guardrail emits must
+          carry an audit-log obligation pointing here; the obligation is part of
+          the disclosure itself, not an aftermarket nicety.
+        source_quote: "(1) An educational agency or institution must maintain a  record of each request for access to and each  disclosure of personally identifiable information from the  education records of each student, as well as the names of State and local educational authorities and Federal officials and agencies listed in § 99.31(a)(3) that may make further  disclosures of personally identifiable information from the student's  education records without consent under § 99.33(b)."
+
+      - id: FERPA-99.32-A5
+        rule_type: permission
+        text: >-
+          When disclosing under the health-or-safety emergency exception
+          (§ 99.31(a)(10) / § 99.36) the institution must record both the articulable
+          and significant threat that formed the basis AND the parties disclosed to.
+        triggers: [emergency_request, health_safety, audit_log_obligation]
+        severity: warn
+        rationale: >-
+          § 99.32(a)(5). Emergency disclosures carry the strongest after-the-fact
+          recordkeeping obligation because they bypass the normal consent flow.
+        source_quote: "(5) An educational agency or institution must  record the following information when it discloses personally identifiable information from  education records under the health or safety emergency exception in § 99.31(a)(10) and § 99.36:"
+
+  # =====================================================================
+  - id: 34-CFR-99.33
+    title: What limitations apply to the redisclosure of information?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.33
+    rules:
+
+      - id: FERPA-99.33-A1
+        rule_type: prohibition
+        text: >-
+          A party that received PII from an education record may NOT redisclose
+          that information to any other party without the prior consent of the
+          parent or eligible student.
+        triggers: [redisclosure_request, third_party_forward]
+        requires_consent: true
+        severity: block
+        rationale: >-
+          § 99.33(a)(1). This is the rule that blocks an AI advisor (or any
+          downstream recipient) from forwarding records it received — a critical
+          guardrail-as-recipient case.
+        source_quote: "(1) An educational agency or institution may disclose personally identifiable information from an education  record only on the condition that the  party to whom the information is disclosed will not disclose the information to any other  party without the prior consent of the  parent or  eligible student."
+
+      - id: FERPA-99.33-A2
+        rule_type: prohibition
+        text: >-
+          Officers, employees, and agents of a party receiving PII under
+          § 99.33(a)(1) may use the information ONLY for the purposes for which
+          the original disclosure was made.
+        triggers: [purpose_limitation, secondary_use]
+        severity: block
+        rationale: >-
+          § 99.33(a)(2). Purpose limitation: secondary use is a redisclosure-class
+          violation even within the recipient organization.
+        source_quote: "(2) The officers, employees, and agents of a party that receives information under paragraph (a)(1) of this section may use the information, but only for the purposes for which the  disclosure was made."
+
+      - id: FERPA-99.33-C
+        rule_type: exception
+        text: >-
+          The § 99.33(a) redisclosure prohibition does NOT apply to disclosures
+          made under §§ 99.31(a)(8), (9), (11), (12), (14), (15), and (16), nor
+          to outcome disclosures postsecondary institutions must make under the
+          Clery Act for sexual offense disciplinary proceedings.
+        triggers: [redisclosure_request, clery_act_overlap]
+        severity: warn
+        rationale: >-
+          § 99.33(c). The eight enumerated exception subsections are excluded
+          from the redisclosure default; guardrail must reach allow-with-audit
+          rather than block when one of these applies.
+        source_quote: "(c) Paragraph (a) of this section does not apply to  disclosures under §§ 99.31(a)(8), (9), (11), (12), (14), (15), and (16), and to information that postsecondary institutions are required to disclose under the Jeanne Clery  Disclosure of Campus Security Policy and Campus Crime Statistics  Act, 20 U.S.C. 1092(f) (Clery Act), to the accuser and accused regarding the outcome of any campus disciplinary proceeding brought alleging a sexual offense."
+
+  # =====================================================================
+  - id: 34-CFR-99.36
+    title: What conditions apply to disclosure of information in health and safety emergencies?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.36
+    rules:
+
+      - id: FERPA-99.36-A
+        rule_type: exception
+        text: >-
+          In a health-or-safety emergency, the institution may disclose PII to
+          appropriate parties (including parents of an eligible student) if knowledge
+          of the information is necessary to protect the health or safety of the
+          student or other individuals.
+        triggers: [emergency_request, health_safety, time_sensitive]
+        severity: warn
+        rationale: >-
+          § 99.36(a). Highest priority in the guardrail's outcome cascade —
+          emergency time-pressure cases must short-circuit the consent path.
+        source_quote: "(a) An educational agency or institution may disclose personally identifiable information from an education  record to appropriate parties, including  parents of an  eligible student, in connection with an emergency if knowledge of the information is necessary to protect the health or safety of the student or other individuals."
+
+      - id: FERPA-99.36-C
+        rule_type: definition
+        text: >-
+          The institution must find an "articulable and significant threat" to
+          health or safety based on the totality of circumstances; if a rational
+          basis existed at the time, the Department will not second-guess the
+          determination.
+        triggers: [emergency_request, articulable_threat_standard]
+        severity: warn
+        rationale: >-
+          § 99.36(c) — the operative legal standard, more rigorous than "any
+          emergency." Bare-feel emergencies do not satisfy.
+        source_quote: "If the  educational agency or institution determines that there is an articulable and significant threat to the health or safety of a student or other individuals, it may disclose information from  education records to any person whose knowledge of the information is necessary to protect the health or safety of the student or other individuals."
+
+      - id: FERPA-99.36-B1
+        rule_type: permission
+        text: >-
+          The institution may include in a student's education records appropriate
+          information about disciplinary action taken for conduct posing a
+          significant risk to the safety or well-being of the student, other
+          students, or the school community.
+        triggers: [disciplinary_action, safety_risk_documentation]
+        severity: warn
+        rationale: >-
+          § 99.36(b)(1). Allows discipline-related safety information to live in
+          the student record, supporting downstream § 99.36(b)(2)+(3) sharing
+          with teachers/officials with LEI.
+        source_quote: "(1) Including in the education records of a student appropriate information concerning disciplinary action taken against the student for conduct that posed a significant risk to the safety or well-being of that student, other students, or other members of the school community;"
+
+  # =====================================================================
+  - id: 34-CFR-99.37
+    title: What conditions apply to disclosing directory information?
+    subpart: D
+    source_url: https://www.law.cornell.edu/cfr/text/34/99.37
+    rules:
+
+      - id: FERPA-99.37-A
+        rule_type: permission
+        text: >-
+          Directory information may be disclosed only after the agency has given
+          public notice to parents and eligible students of the categories
+          designated, the right to refuse such designation, and the time window
+          to opt out.
+        triggers: [directory_info_request]
+        requires_directory_opt_out_check: true
+        severity: escalate
+        rationale: >-
+          § 99.37(a). Directory disclosures are the only branch in the cascade
+          where the guardrail must check student-level opt-out state — every other
+          rule turns on the query/role/purpose alone.
+        source_quote: "(a) An educational agency or institution may disclose  directory information if it has given public  notice to  parents of students in  attendance and  eligible students in  attendance at the agency or institution of:"
+
+      - id: FERPA-99.37-A-OPT-OUT
+        rule_type: permission
+        text: >-
+          A parent or eligible student has the right to refuse to let the agency
+          designate any or all categories of information about the student as
+          directory information; valid opt-outs must be honored, even after
+          enrollment ends (until rescinded).
+        triggers: [directory_info_request, opt_out_check]
+        requires_directory_opt_out_check: true
+        severity: block
+        rationale: >-
+          § 99.37(a)(2) + § 99.37(b). When the student has opted out, the
+          guardrail must block the directory disclosure path entirely; opt-outs
+          persist past enrollment.
+        source_quote: "(2) A parent's or  eligible student's right to refuse to let the agency or institution designate any or all of those types of information about the student as  directory information; and"
+
+      - id: FERPA-99.37-C
+        rule_type: exception
+        text: >-
+          A directory-information opt-out CANNOT be used to prevent in-class
+          disclosure of the student's name/identifier/institutional email, nor
+          to prevent display of a designated ID card or badge.
+        triggers: [directory_info_request, classroom_use, id_badge_use]
+        severity: warn
+        rationale: >-
+          § 99.37(c). Narrowed opt-out — even an opt-out student must wear an ID
+          badge if the institution has designated that as directory information.
+        source_quote: "(c) A parent or  eligible student may not use the right under paragraph (a)(2) of this section to opt out of  directory information disclosures to—"
+
+      - id: FERPA-99.37-E
+        rule_type: prohibition
+        text: >-
+          The institution may NOT disclose or confirm directory information
+          without § 99.30 written consent if a student's SSN or other
+          non-directory information is used alone or combined with other elements
+          to identify the student or their records.
+        triggers: [directory_info_request, ssn_combined, identity_combination]
+        requires_consent: true
+        severity: block
+        rationale: >-
+          § 99.37(e). Critical for AI systems: even directory data becomes
+          PII when combined with non-directory identifiers; the guardrail blocks
+          re-identification flows.
+        source_quote: "(e) An educational agency or institution may not disclose or confirm  directory information without meeting the written consent requirements in § 99.30 if a student's social security number or other non-directory information is used alone or combined with other data elements to identify or help identify the student or the student's records."

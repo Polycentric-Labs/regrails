@@ -1,0 +1,114 @@
+[project]
+name = "regrails"
+version = "0.1.0"
+description = "Codify US federal regulations into machine-readable rules with verbatim-text faithfulness gates and AI-engagement guardrails. POC: FERPA Subpart D (34 CFR Part 99)."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Allen Byrd", email = "allen@allenfbyrd.com" }]
+keywords = [
+  "ferpa",
+  "policy-as-code",
+  "regulation-as-code",
+  "ai-governance",
+  "compliance",
+  "guardrails",
+  "higher-education",
+  "edtech",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Legal Industry",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = [
+  "pydantic>=2.9.0",
+  "typer>=0.15.0",
+  "httpx>=0.27.0",
+  "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.7.0",
+  "mypy>=1.13.0",
+  "types-pyyaml>=6.0.0",
+]
+
+[project.scripts]
+regrails = "regrails.cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/Polycentric-Labs/regrails"
+Repository = "https://github.com/Polycentric-Labs/regrails"
+Issues = "https://github.com/Polycentric-Labs/regrails/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/regrails"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"data/cfr" = "regrails/data/cfr"
+"data/encoded" = "regrails/data/encoded"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+
+[tool.coverage.run]
+source = ["src/regrails"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "A", "C4", "DTZ", "T20", "RET", "SIM"]
+ignore = ["S101"]  # allow assert in tests
+
+[tool.ruff.lint.per-file-ignores]
+# B008: Typer's idiomatic pattern is `typer.Option(...)` in defaults — false positive
+"src/regrails/cli/*" = ["B008"]
+# A002: Pydantic models routinely use `id` as a field name — not a builtin shadow concern
+"src/regrails/models.py" = ["A002"]
+# S105/S106: hard-coded "secrets" in test fixtures are obviously fake; SIM117: nested
+# context managers in pytest patterns are clearer than combined
+"tests/*" = ["S105", "S106", "SIM117"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+files = ["src/regrails", "tests"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false

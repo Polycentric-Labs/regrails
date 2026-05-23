@@ -1,0 +1,80 @@
+# Secrets — RegRails reads OPENROUTER_API_KEY from C:\Users\allen\.secrets\
+# (mounted via env-file pattern, never committed). Belt-and-suspenders patterns:
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual envs
+.venv/
+venv/
+ENV/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.cache
+coverage.xml
+*.cover
+.hypothesis/
+
+# Type-checking + linting caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+.idea/
+.cursor/
+
+# OS / editor
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Claude Code local state
+.claude/
+
+# Local scratch — fetched eCFR HTML, extractor scripts, demo dumps. Not for
+# the public repo; the canonical CFR text lives in data/cfr/ and the
+# canonical demo output is regenerated from recorded-runs.
+.scratch/

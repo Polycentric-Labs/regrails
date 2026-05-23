@@ -1,0 +1,41 @@
+{
+  "scenario_id": "q2-vendor-unverified",
+  "title": "Outsourced AI vendor \u2014 safe-harbor unverified",
+  "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
+  "consultation": {
+    "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
+    "requester_role": "outsourced_vendor",
+    "purpose": "advising",
+    "data_requested": [
+      "test_scores"
+    ],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": false,
+    "aggregate_or_de_identified": false
+  },
+  "decision": {
+    "id": "a391933b-100a-4be8-824b-f0c341b58684",
+    "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
+    "timestamp": "2026-05-23T06:31:22.801211Z",
+    "matched_rules": [
+      "FERPA-99.30-1",
+      "FERPA-99.30-2",
+      "FERPA-99.31-A1",
+      "FERPA-99.31-A1B",
+      "FERPA-99.32-A1"
+    ],
+    "outcome": "escalate_consent",
+    "llm_response": "Escalation: outsourced vendor cannot be treated as a school official.\nRequired \u00a7 99.31(a)(1)(i)(B) conditions not on file: bound_by_section_99_33_a_redisclosure_limits, performs_institutional_function, under_direct_institutional_control\nEither complete vendor contract amendments or obtain \u00a7 99.30 consent before any further disclosure.",
+    "citations_emitted": [
+      "34-CFR-99.31(a)(1)(i)(B)"
+    ],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "advisor_reply": "I apologize, but I cannot release Jane Doe's test scores at this time. Per federal educational privacy regulations, external tutors from vendor organizations require specific written consent and contractual conditions before accessing student academic records. You'll need to work with our school administration to establish the proper authorization documentation before receiving any student information.",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-05-23T06:31:25.051695+00:00"
+}

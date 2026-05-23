@@ -1,0 +1,3 @@
+"""RegRails — federal-regulation codification with AI-engagement guardrails."""
+
+__version__ = "0.1.0"
