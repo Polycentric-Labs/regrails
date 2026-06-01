@@ -22,8 +22,11 @@ from .models import Citation, RegulationSection, Rule
 _RULER = "=" * 78
 _SECTION_HEADING_RE = re.compile(r"^§\s*(?P<num>\d+(?:\.\d+)*)\s+(?P<title>.+?)\s*$")
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-_DATA = _PROJECT_ROOT / "data"
+# Data must resolve both in a source checkout (repo-root/data) and in an installed
+# wheel (the hatchling force-include places the bundles under <package>/data).
+_PKG_DATA = Path(__file__).resolve().parent / "data"
+_REPO_DATA = Path(__file__).resolve().parent.parent.parent / "data"
+_DATA = _PKG_DATA if _PKG_DATA.exists() else _REPO_DATA
 
 # Framework registry: name -> (encoded YAML, bundled verbatim text).
 FRAMEWORKS: dict[str, tuple[Path, Path]] = {
