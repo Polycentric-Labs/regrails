@@ -1,0 +1,57 @@
+{
+  "scenario_id": "q11-titleiv-insufficient",
+  "title": "Title IV \u2014 determination asked, facts missing (insufficient_facts)",
+  "query": "Will I get financial aid next semester?",
+  "consultation": {
+    "query": "Will I get financial aid next semester?",
+    "topic": "aid_status",
+    "requester_role": "unknown",
+    "purpose": "financial_aid",
+    "data_requested": [],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": false,
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": true,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
+  },
+  "decision": {
+    "id": "6449475f-7e62-4a97-9d5c-452cb5a73874",
+    "query": "Will I get financial aid next semester?",
+    "framework": "Title IV",
+    "timestamp": "2026-06-01T20:35:39.014027Z",
+    "matched_rules": [
+      "TIV-668.34-A1",
+      "TIV-668.34-A3i",
+      "TIV-668.34-A4ii",
+      "TIV-668.34-MAXTF",
+      "TIV-668.34-A7",
+      "TIV-668.34-A8i",
+      "TIV-668.34-A8ii",
+      "TIV-668.34-A9ii",
+      "TIV-668.32-A1i",
+      "TIV-668.32-E1",
+      "TIV-668.32-F",
+      "TIV-668.32-G1",
+      "TIV-668.32-G2",
+      "TIV-668.32-I"
+    ],
+    "outcome": "insufficient_facts",
+    "risk_tier": "low",
+    "human_gate_required": false,
+    "llm_response": "Cannot assess: a Title IV aid determination depends on the student's satisfactory-academic-progress evaluation (34 CFR \u00a7 668.34(a)(3)) and eligibility facts that are not present in this request.\nProvide the SAP evaluation result and loan-default status, or route to the financial-aid office.",
+    "citations_emitted": [
+      "34-CFR-668.34(a)(3)"
+    ],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "record_hash": "214b64a4b6c684af8a7bcea4913cb0e496b98ac19ff7b8ba02d1893888dcc3af",
+  "advisor_reply": "To assess your financial aid eligibility for next semester, you'll need to meet with a Financial Aid advisor who can review your specific academic and financial circumstances. Specific factors like your Satisfactory Academic Progress (SAP) status, current GPA, completed credit hours, and any prior loan default issues will determine your aid eligibility. I recommend scheduling an appointment with our Financial Aid Office to get a comprehensive evaluation of your individual situation.",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-06-01T20:35:41.797207+00:00"
+}

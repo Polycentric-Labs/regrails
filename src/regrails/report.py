@@ -1,0 +1,135 @@
+"""Self-contained static HTML decision report.
+
+Renders the recorded demo decisions into a single dependency-free HTML file a
+non-technical reviewer (e.g. a program officer) can open in a browser — each
+scenario shows the query, framework, outcome, risk tier, human-gate flag,
+citations, matched rules, the advisor reply, and the provenance record hash.
+"""
+
+from __future__ import annotations
+
+import html
+import json
+from pathlib import Path
+from typing import Any
+
+from .audit import verify_chain
+
+_OUTCOME_COLOR = {
+    "allow": "#1a7f37",
+    "block": "#b91c1c",
+    "escalate_consent": "#b45309",
+    "escalate_directory_check": "#b45309",
+    "escalate_human_review": "#7c3aed",
+    "insufficient_facts": "#6b7280",
+    "out_of_scope": "#2563eb",
+}
+_RISK_COLOR = {"low": "#1a7f37", "medium": "#b45309", "high": "#b91c1c"}
+
+
+def _esc(s: Any) -> str:
+    return html.escape(str(s))
+
+
+def build_html(records: list[dict[str, Any]], chain_ok: bool | None, chain_n: int) -> str:
+    cards: list[str] = []
+    for i, r in enumerate(records, 1):
+        d = r["decision"]
+        outcome = d["outcome"]
+        risk = d.get("risk_tier", "-")
+        gate = d.get("human_gate_required", False)
+        oc = _OUTCOME_COLOR.get(outcome, "#374151")
+        rc = _RISK_COLOR.get(risk, "#374151")
+        cites = " ".join(
+            f'<code>{_esc(c)}</code>' for c in d.get("citations_emitted", [])
+        ) or "<em>none</em>"
+        matched = ", ".join(_esc(m) for m in d.get("matched_rules", [])) or "<em>none</em>"
+        gate_badge = (
+            '<span class="badge" style="background:#7c3aed">HUMAN GATE</span>' if gate else ""
+        )
+        cards.append(
+            f"""
+        <div class="card">
+          <div class="head">
+            <span class="num">#{i}</span>
+            <span class="fw">{_esc(d.get("framework", "-"))}</span>
+            <span class="badge" style="background:{oc}">{_esc(outcome)}</span>
+            <span class="badge" style="background:{rc}">risk: {_esc(risk)}</span>
+            {gate_badge}
+          </div>
+          <div class="q">{_esc(r["query"])}</div>
+          <div class="meta"><b>Citations:</b> {cites}</div>
+          <div class="meta"><b>Matched rules:</b> {matched}</div>
+          <details><summary>Advisor reply (LLM-rendered) + provenance</summary>
+            <div class="reply">{_esc(r.get("advisor_reply", ""))}</div>
+            <div class="prov">record_hash: <code>{_esc(r.get("record_hash", "n/a"))}</code></div>
+          </details>
+        </div>"""
+        )
+
+    if chain_ok is None:
+        chain_html = '<span class="badge" style="background:#6b7280">no chain</span>'
+    elif chain_ok:
+        chain_html = (
+            f'<span class="badge" style="background:#1a7f37">chain verified — '
+            f'{chain_n} records, no tampering</span>'
+        )
+    else:
+        chain_html = '<span class="badge" style="background:#b91c1c">chain BROKEN</span>'
+
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RegRails — decision report</title>
+<style>
+  body {{ font-family: -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background:#f8fafc; color:#0f172a; }}
+  header {{ background:#0f172a; color:#fff; padding:24px 32px; }}
+  header h1 {{ margin:0 0 6px; font-size:22px; }}
+  header p {{ margin:0; color:#cbd5e1; font-size:14px; max-width:780px; }}
+  .wrap {{ padding:24px 32px; max-width:980px; margin:0 auto; }}
+  .card {{ background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:16px 18px; margin:14px 0; box-shadow:0 1px 2px rgba(0,0,0,.04); }}
+  .head {{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }}
+  .num {{ font-weight:700; color:#64748b; }}
+  .fw {{ font-weight:700; }}
+  .badge {{ color:#fff; font-size:12px; font-weight:600; padding:2px 8px; border-radius:999px; }}
+  .q {{ font-size:16px; font-weight:600; margin:6px 0 10px; }}
+  .meta {{ font-size:13px; color:#334155; margin:3px 0; }}
+  code {{ background:#f1f5f9; padding:1px 5px; border-radius:4px; font-size:12px; }}
+  details {{ margin-top:8px; }}
+  summary {{ cursor:pointer; color:#2563eb; font-size:13px; }}
+  .reply {{ background:#f8fafc; border-left:3px solid #cbd5e1; padding:10px 12px; margin:8px 0; font-size:14px; white-space:pre-wrap; }}
+  .prov {{ font-size:12px; color:#64748b; }}
+  .note {{ font-size:12px; color:#64748b; margin-top:18px; }}
+</style></head>
+<body>
+<header>
+  <h1>RegRails — AI advisor guardrail decision report</h1>
+  <p>Each decision below is made by the deterministic rule engine (FERPA + Title IV),
+     before any LLM call. The advisor reply is the only LLM-generated text. Synthetic
+     data only. {chain_html}</p>
+</header>
+<div class="wrap">
+  {"".join(cards)}
+  <p class="note">Outcomes: allow / block / escalate_consent / escalate_directory_check /
+     escalate_human_review (irreversible, human gate) / insufficient_facts / out_of_scope.
+     Generated by <code>regrails report</code>. This is a proof-of-concept, not legal advice.</p>
+</div>
+</body></html>
+"""
+
+
+def load_records(recorded_dir: Path) -> list[dict[str, Any]]:
+    return [
+        json.loads(f.read_text(encoding="utf-8"))
+        for f in sorted(recorded_dir.glob("*.json"))
+    ]
+
+
+def build_report(recorded_dir: Path, chain_path: Path | None) -> str:
+    records = load_records(recorded_dir)
+    chain_ok: bool | None = None
+    chain_n = 0
+    if chain_path is not None and chain_path.exists():
+        chain_ok, _ = verify_chain(chain_path)
+        chain_n = sum(1 for line in chain_path.read_text(encoding="utf-8").splitlines() if line.strip())
+    return build_html(records, chain_ok, chain_n)

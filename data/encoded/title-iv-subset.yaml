@@ -1,0 +1,217 @@
+# RegRails — encoded Title IV (34 CFR Part 668) rules, SUBSET.
+#
+# Each Rule's `source_quote` is a verbatim substring of the bundled CFR text at
+# data/cfr/title-iv-subset.txt. The faithfulness gate verifies (1) substring
+# containment and (2) token coverage >= 0.85.
+#
+# This subset centers on Satisfactory Academic Progress (668.34) and student
+# eligibility (668.32) because they are the rules an AI financial-aid advisor is
+# most likely to be asked about, and because the high-stakes ones (loss of aid
+# eligibility, default) are exactly where automation must defer to a human gate.
+
+metadata:
+  framework: Title IV
+  framework_long: Title IV of the Higher Education Act (Student Assistance General Provisions)
+  citation: 34 CFR Part 668 (subset)
+  source_root_url: https://www.law.cornell.edu/cfr/text/34
+  bundled_text_path: data/cfr/title-iv-subset.txt
+  publication_date: "2023-10-31"
+
+sections:
+
+  # =====================================================================
+  - id: 34-CFR-668.34
+    title: Satisfactory academic progress.
+    subpart: C
+    source_url: https://www.law.cornell.edu/cfr/text/34/668.34
+    rules:
+
+      - id: TIV-668.34-A1
+        rule_type: permission
+        risk_tier: low
+        text: >-
+          An institution's SAP policy must be at least as strict as the policy it
+          applies to students who do not receive Title IV aid.
+        triggers: [sap_policy, sap_question]
+        severity: warn
+        rationale: >-
+          668.34(a)(1). Informational baseline; an advisor can explain the policy
+          must be consistent and at least as strict as the non-aid policy.
+        source_quote: "The policy is at least as strict as the policy the institution applies to a student who is not receiving assistance under the title IV, HEA programs"
+
+      - id: TIV-668.34-A3i
+        rule_type: definition
+        risk_tier: low
+        text: >-
+          For programs of one academic year or shorter, SAP is evaluated at the end
+          of each payment period.
+        triggers: [sap_policy, sap_question]
+        severity: warn
+        rationale: >-
+          668.34(a)(3)(i). Defines when an evaluation happens; needed before any
+          status (warning/probation/termination) can be assessed.
+        source_quote: "At the end of each payment period if the educational program is either one academic year in length or shorter than an academic year"
+
+      - id: TIV-668.34-A4ii
+        rule_type: definition
+        risk_tier: medium
+        text: >-
+          In a program longer than two academic years, by the end of the second
+          academic year the student must have a GPA of at least a "C" (or equivalent)
+          or academic standing consistent with graduation requirements.
+        triggers: [sap_question, gpa_standard]
+        severity: warn
+        rationale: >-
+          668.34(a)(4)(ii). A concrete qualitative SAP threshold an advisor may be
+          asked about; still institution-applied, not advisor-determined.
+        source_quote: "the student must have a GPA of at least a \"C\" or its equivalent, or have academic standing consistent with the institution's requirements for graduation"
+
+      - id: TIV-668.34-MAXTF
+        rule_type: definition
+        risk_tier: medium
+        text: >-
+          Maximum timeframe for an undergraduate credit-hour program is no longer
+          than 150 percent of the published program length.
+        triggers: [sap_question, max_timeframe]
+        severity: warn
+        rationale: >-
+          668.34(b). The 150% rule; an advisor can state it, but applying it to a
+          specific student's record is an institutional determination.
+        source_quote: "a period that is no longer than 150 percent of the published length of the educational program, as measured in credit hours, or expressed in calendar time"
+
+      - id: TIV-668.34-A7
+        rule_type: prohibition
+        risk_tier: high
+        text: >-
+          At each evaluation, a student who has not achieved the required GPA or pace
+          is no longer eligible for Title IV aid (subject to warning/probation paths).
+          An AI advisor must NOT confirm continued eligibility; this is a high-stakes
+          institutional determination.
+        triggers: [sap_termination, sap_evaluation, aid_eligibility, sap_question]
+        severity: block
+        rationale: >-
+          668.34(a)(7). Loss of aid eligibility is high-stakes and effectively
+          irreversible for the payment period; route to a human (financial-aid office).
+        source_quote: "a student who has not achieved the required GPA, or who is not successfully completing his or her educational program at the required pace, is no longer eligible to receive assistance under the title IV, HEA programs"
+
+      - id: TIV-668.34-A8i
+        rule_type: exception
+        risk_tier: medium
+        text: >-
+          A student on financial aid warning may continue to receive Title IV aid for
+          one payment period despite a SAP determination, with no appeal required.
+        triggers: [sap_warning, aid_status, sap_question]
+        severity: warn
+        rationale: >-
+          668.34(a)(8)(i). An advisor may explain warning status, but the status
+          itself is assigned by the institution.
+        source_quote: "A student on financial aid warning may continue to receive assistance under the title IV, HEA programs for one payment period despite a determination that the student is not making satisfactory academic progress."
+
+      - id: TIV-668.34-A8ii
+        rule_type: exception
+        risk_tier: medium
+        text: >-
+          A student on financial aid probation may receive Title IV funds for one
+          payment period and may be required to follow specific terms or an academic plan.
+        triggers: [sap_probation, aid_status, sap_question]
+        severity: warn
+        rationale: >-
+          668.34(a)(8)(ii). Probation follows an appeal + reinstatement; an advisor
+          can describe it but cannot grant it.
+        source_quote: "A student on financial aid probation may receive title IV, HEA program funds for one payment period."
+
+      - id: TIV-668.34-A9ii
+        rule_type: permission
+        risk_tier: medium
+        text: >-
+          A SAP appeal may be based on the death of a relative, the student's injury or
+          illness, or other special circumstances.
+        triggers: [sap_appeal, sap_question]
+        severity: warn
+        rationale: >-
+          668.34(a)(9)(ii). An advisor can explain valid appeal bases; the appeal
+          decision rests with the institution.
+        source_quote: "The basis on which a student may file an appeal: The death of a relative, an injury or illness of the student, or other special circumstances"
+
+  # =====================================================================
+  - id: 34-CFR-668.32
+    title: Student eligibility.
+    subpart: C
+    source_url: https://www.law.cornell.edu/cfr/text/34/668.32
+    rules:
+
+      - id: TIV-668.32-A1i
+        rule_type: permission
+        risk_tier: medium
+        text: >-
+          To receive Title IV aid a student must be a regular student enrolled (or
+          accepted for enrollment) in an eligible program at an eligible institution.
+        triggers: [aid_eligibility, eligibility_question]
+        severity: warn
+        rationale: >-
+          668.32(a)(1)(i). A core eligibility gate; an advisor can explain it but
+          the eligibility determination is institutional/ED.
+        source_quote: "Is a regular student enrolled, or accepted for enrollment, in an eligible program at an eligible institution"
+
+      - id: TIV-668.32-E1
+        rule_type: permission
+        risk_tier: medium
+        text: >-
+          A student generally must have a high school diploma or its recognized
+          equivalent to receive Title IV aid.
+        triggers: [aid_eligibility, eligibility_question]
+        severity: warn
+        rationale: >-
+          668.32(e)(1). Eligibility gate; advisor-explainable, institution-determined.
+        source_quote: "Has a high school diploma or its recognized equivalent"
+
+      - id: TIV-668.32-F
+        rule_type: permission
+        risk_tier: medium
+        text: >-
+          A student must maintain SAP per the institution's published standards that
+          meet 668.34 to remain eligible for Title IV aid.
+        triggers: [aid_eligibility, sap_policy, eligibility_question]
+        severity: warn
+        rationale: >-
+          668.32(f). Ties eligibility to SAP; bridges the two encoded sections.
+        source_quote: "Maintains satisfactory academic progress in his or her course of study according to the institution's published standards of satisfactory academic progress that meet the requirements of § 668.34."
+
+      - id: TIV-668.32-G1
+        rule_type: prohibition
+        risk_tier: high
+        text: >-
+          A student in default on a Title IV loan is not eligible for further Title IV
+          aid (absent a 668.35 exception). An AI advisor must NOT tell a student in
+          default they are eligible; route to a human.
+        triggers: [aid_eligibility, loan_default, eligibility_question]
+        severity: block
+        rationale: >-
+          668.32(g)(1). Default is a high-stakes eligibility bar with resolution
+          paths that require human handling; not an automatable yes/no.
+        source_quote: "Is not in default, and certifies that he or she is not in default, on a loan made under any title IV, HEA loan program"
+
+      - id: TIV-668.32-G2
+        rule_type: prohibition
+        risk_tier: medium
+        text: >-
+          A student who has borrowed above annual or aggregate Title IV loan limits is
+          not eligible for further such aid (absent a 668.35 exception).
+        triggers: [aid_eligibility, loan_limits, eligibility_question]
+        severity: warn
+        rationale: >-
+          668.32(g)(2). Loan-limit bar; advisor-explainable, institution-resolved.
+        source_quote: "Has not obtained loan amounts that exceed annual or aggregate loan limits made under any title IV, HEA loan program"
+
+      - id: TIV-668.32-I
+        rule_type: permission
+        risk_tier: medium
+        text: >-
+          A student generally must have a correct Social Security number to receive
+          Title IV aid (narrow Pacific-territory exceptions aside).
+        triggers: [aid_eligibility, eligibility_question]
+        severity: warn
+        rationale: >-
+          668.32(i). Eligibility gate; note this is non-directory PII under FERPA,
+          linking the two frameworks.
+        source_quote: "Has a correct social security number as determined under § 668.36"

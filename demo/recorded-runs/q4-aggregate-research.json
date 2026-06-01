@@ -1,25 +1,29 @@
 {
   "scenario_id": "q4-aggregate-research",
-  "title": "De-identified aggregate research \u2014 studies exception",
+  "title": "FERPA \u2014 de-identified aggregate research",
   "query": "For our annual program evaluation, can I get aggregate graduation rates by ethnicity?",
   "consultation": {
     "query": "For our annual program evaluation, can I get aggregate graduation rates by ethnicity?",
+    "topic": "disclosure",
     "requester_role": "researcher",
     "purpose": "research",
-    "data_requested": [
-      "graduation_rate"
-    ],
+    "data_requested": [],
     "consent_on_file": false,
     "student_opted_out_of_directory": false,
     "emergency_justified": false,
     "safe_harbor_conditions_met": [],
     "receiver_redisclosing": false,
-    "aggregate_or_de_identified": true
+    "aggregate_or_de_identified": true,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
   },
   "decision": {
-    "id": "74d7cba8-5d0c-4d3d-ab23-d8ace67071bf",
+    "id": "f0eaff0f-5e8b-4bcc-9c8b-6505bc95a2bc",
     "query": "For our annual program evaluation, can I get aggregate graduation rates by ethnicity?",
-    "timestamp": "2026-05-23T06:31:27.148058Z",
+    "framework": "FERPA",
+    "timestamp": "2026-06-01T20:35:18.403790Z",
     "matched_rules": [
       "FERPA-99.30-1",
       "FERPA-99.30-2",
@@ -28,6 +32,8 @@
       "FERPA-99.32-A1"
     ],
     "outcome": "allow",
+    "risk_tier": "low",
+    "human_gate_required": false,
     "llm_response": "Allowed under 34 CFR \u00a7 99.31(b)(1) (de-identified records).\nConfirm: removal of all PII has been done with a reasonable de-identification determination accounting for other reasonably-available information.",
     "citations_emitted": [
       "34-CFR-99.31(b)(1)",
@@ -36,7 +42,8 @@
     "latency_ms": 0,
     "model": ""
   },
-  "advisor_reply": "Yes, you can access aggregate graduation rates by ethnicity for program evaluation purposes. The data must be fully de-identified, ensuring no individual student can be recognized. Please confirm with our data analytics team that all personally identifiable information has been removed before generating the report.\n\n[Advisor follow-up note for internal records: Document this request and verification process per our FERPA compliance tracking protocols.]",
+  "record_hash": "f518d23f69935cd00767b4681828ce46185ed9500833aabf91000fcd47f641dd",
+  "advisor_reply": "Yes, you can obtain aggregate graduation rates by ethnicity for your program evaluation. These summary statistics are permissible under FERPA regulations when all personally identifiable information is removed. After generating the report, please ensure our institutional research team confirms de-identification and maintains the aggregated data at a group level without individual student details. I recommend maintaining this documentation for our institutional records.",
   "advisor_model": "anthropic/claude-3.5-haiku",
-  "rendered_at": "2026-05-23T06:31:29.822262+00:00"
+  "rendered_at": "2026-06-01T20:35:20.914416+00:00"
 }

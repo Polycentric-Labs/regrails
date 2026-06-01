@@ -1,0 +1,40 @@
+{
+  "scenario_id": "q12-out-of-scope",
+  "title": "Out of scope \u2014 not a records/aid matter",
+  "query": "What time does the campus library close tonight?",
+  "consultation": {
+    "query": "What time does the campus library close tonight?",
+    "topic": "other",
+    "requester_role": "unknown",
+    "purpose": "unknown",
+    "data_requested": [],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": false,
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
+  },
+  "decision": {
+    "id": "67ebb9ec-b8a8-46fb-89e5-76b618768b7d",
+    "query": "What time does the campus library close tonight?",
+    "framework": "n/a",
+    "timestamp": "2026-06-01T20:35:41.800209Z",
+    "matched_rules": [],
+    "outcome": "out_of_scope",
+    "risk_tier": "low",
+    "human_gate_required": false,
+    "llm_response": "Out of scope: this query is not a regulated student-records or financial-aid matter, so no RegRails rule applies.\nAn advisor may answer it normally without a compliance gate.",
+    "citations_emitted": [],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "record_hash": "a073351eed01b417dce5805a729b0b5a404432d806e442569e61c889dfdbffb2",
+  "advisor_reply": "The library is open until 10 PM tonight. You can also check current hours on our campus website or by calling the library circulation desk at extension 5432 for the most up-to-date information.",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-06-01T20:35:43.730178+00:00"
+}

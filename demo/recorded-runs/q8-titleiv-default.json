@@ -1,0 +1,57 @@
+{
+  "scenario_id": "q8-titleiv-default",
+  "title": "Title IV \u2014 loan default, eligibility asked (irreversible -> human gate)",
+  "query": "I defaulted on a student loan a while back. Am I still eligible for financial aid this year?",
+  "consultation": {
+    "query": "I defaulted on a student loan a while back. Am I still eligible for financial aid this year?",
+    "topic": "aid_status",
+    "requester_role": "unknown",
+    "purpose": "financial_aid",
+    "data_requested": [],
+    "consent_on_file": false,
+    "student_opted_out_of_directory": false,
+    "emergency_justified": false,
+    "safe_harbor_conditions_met": [],
+    "receiver_redisclosing": false,
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": true,
+    "sap_status": "unknown",
+    "student_in_default": true,
+    "appeal_basis_present": false
+  },
+  "decision": {
+    "id": "189982cd-c430-49fe-8cb7-c0aa45e29235",
+    "query": "I defaulted on a student loan a while back. Am I still eligible for financial aid this year?",
+    "framework": "Title IV",
+    "timestamp": "2026-06-01T20:35:29.946425Z",
+    "matched_rules": [
+      "TIV-668.34-A1",
+      "TIV-668.34-A3i",
+      "TIV-668.34-A4ii",
+      "TIV-668.34-MAXTF",
+      "TIV-668.34-A7",
+      "TIV-668.34-A8i",
+      "TIV-668.34-A8ii",
+      "TIV-668.34-A9ii",
+      "TIV-668.32-A1i",
+      "TIV-668.32-E1",
+      "TIV-668.32-F",
+      "TIV-668.32-G1",
+      "TIV-668.32-G2",
+      "TIV-668.32-I"
+    ],
+    "outcome": "escalate_human_review",
+    "risk_tier": "high",
+    "human_gate_required": true,
+    "llm_response": "A student in default on a Title IV loan is not eligible for further Title IV aid under 34 CFR \u00a7 668.32(g)(1), absent a \u00a7 668.35 exception.\nDo not confirm eligibility. Route the student to the financial-aid office to resolve the default (e.g. rehabilitation or consolidation) before any aid determination is made.",
+    "citations_emitted": [
+      "34-CFR-668.32(g)(1)"
+    ],
+    "latency_ms": 0,
+    "model": ""
+  },
+  "record_hash": "2a49edab0fc0bef3368f90f6c0287ec805f6224358abeffac46e81696bb2c910",
+  "advisor_reply": "I understand that this is a complex loan default situation that requires direct professional assessment. You'll need to speak with a financial aid counselor who can review your specific loan history and explore reinstatement options. Please contact our Financial Aid Office at [institutional contact info] to schedule an appointment. They can help you understand the steps to resolve your loan default and potentially restore your aid eligibility.",
+  "advisor_model": "anthropic/claude-3.5-haiku",
+  "rendered_at": "2026-06-01T20:35:32.775715+00:00"
+}

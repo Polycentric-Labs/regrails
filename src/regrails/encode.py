@@ -1,8 +1,9 @@
-"""Load encoded YAML rules + bundled CFR text into RegulationSection objects.
+"""Load encoded YAML rules + bundled regulatory text into RegulationSection objects.
 
-Pairs each YAML rule with the verbatim source text. ``load_sections()`` is the
-single public entry point and the input to both the faithfulness gate and the
-guardrail engine.
+v0.2: multi-framework. The bundled POC ships two frameworks — FERPA (34 CFR
+Part 99 Subpart D) and a Title IV subset (34 CFR Part 668) — each a (yaml, bundle)
+pair in ``FRAMEWORKS``. ``load_sections()`` defaults to FERPA for backward
+compatibility; ``load_all_sections()`` / ``load_all_rules()`` span every framework.
 """
 
 from __future__ import annotations
@@ -22,21 +23,35 @@ _RULER = "=" * 78
 _SECTION_HEADING_RE = re.compile(r"^§\s*(?P<num>\d+(?:\.\d+)*)\s+(?P<title>.+?)\s*$")
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-_DEFAULT_YAML = _PROJECT_ROOT / "data" / "encoded" / "ferpa-subpart-d.yaml"
-_DEFAULT_BUNDLE = _PROJECT_ROOT / "data" / "cfr" / "ferpa-subpart-d.txt"
+_DATA = _PROJECT_ROOT / "data"
+
+# Framework registry: name -> (encoded YAML, bundled verbatim text).
+FRAMEWORKS: dict[str, tuple[Path, Path]] = {
+    "FERPA": (
+        _DATA / "encoded" / "ferpa-subpart-d.yaml",
+        _DATA / "cfr" / "ferpa-subpart-d.txt",
+    ),
+    "Title IV": (
+        _DATA / "encoded" / "title-iv-subset.yaml",
+        _DATA / "cfr" / "title-iv-subset.txt",
+    ),
+}
 
 
 def default_paths() -> tuple[Path, Path]:
-    """Return the bundled (yaml_path, bundle_path) used in tests + CLI."""
-    return _DEFAULT_YAML, _DEFAULT_BUNDLE
+    """Return the FERPA (yaml_path, bundle_path) — kept for backward compatibility."""
+    return FRAMEWORKS["FERPA"]
+
+
+def framework_paths(framework: str) -> tuple[Path, Path]:
+    """Return the (yaml_path, bundle_path) for a registered framework."""
+    if framework not in FRAMEWORKS:
+        raise ValueError(f"unknown framework: {framework!r}; known: {sorted(FRAMEWORKS)}")
+    return FRAMEWORKS[framework]
 
 
 def _slice_bundle_by_section(bundle_text: str) -> dict[str, str]:
-    """Split the bundled CFR text into ``{ "99.31": "<full text>", ... }``.
-
-    The bundle is shaped: header comments → ``====`` ruler → ``§ 99.XX Title``
-    → section body → next ``====`` ruler → next section, etc.
-    """
+    """Split bundled text into ``{ "99.31": "<full chunk incl. heading>", ... }``."""
     chunks = bundle_text.split(_RULER)
     out: dict[str, str] = {}
     for chunk in chunks:
@@ -47,13 +62,12 @@ def _slice_bundle_by_section(bundle_text: str) -> dict[str, str]:
         heading_match = _SECTION_HEADING_RE.match(lines[0].strip())
         if not heading_match:
             continue
-        num = heading_match.group("num")
-        out[num] = chunk  # store FULL chunk including heading + body + authority
+        out[heading_match.group("num")] = chunk
     return out
 
 
 def _section_num_from_id(section_id: str) -> str:
-    """Extract ``99.31`` from ``34-CFR-99.31``."""
+    """Extract ``99.31`` from ``34-CFR-99.31`` (or ``668.34`` from ``34-CFR-668.34``)."""
     m = re.match(r"^\d+-CFR-(?P<num>\d+(?:\.\d+)*)$", section_id)
     if not m:
         raise ValueError(f"unrecognized section id: {section_id!r}")
@@ -64,25 +78,24 @@ def load_sections(
     yaml_path: Path | None = None,
     bundle_path: Path | None = None,
     *,
+    framework: str = "FERPA",
     audit_sink: Path | None = None,
 ) -> list[RegulationSection]:
     """Load encoded rules from YAML, pair with bundled verbatim text.
 
-    Returns one RegulationSection per top-level ``sections`` entry. Each rule's
-    Citation is built via ``Citation.from_quote`` from the YAML's ``source_quote``
-    plus the section's ``source_url``.
-
-    Raises:
-        FileNotFoundError: if either input file is missing.
-        ValueError: if the YAML references a section not present in the bundle.
+    If ``yaml_path``/``bundle_path`` are given they win; otherwise the paths are
+    looked up from ``FRAMEWORKS[framework]``. The framework label is taken from the
+    YAML ``metadata.framework`` when present, else the ``framework`` argument.
     """
-    yaml_path = yaml_path or _DEFAULT_YAML
-    bundle_path = bundle_path or _DEFAULT_BUNDLE
+    if yaml_path is None or bundle_path is None:
+        fw_yaml, fw_bundle = framework_paths(framework)
+        yaml_path = yaml_path or fw_yaml
+        bundle_path = bundle_path or fw_bundle
 
     if not yaml_path.exists():
         raise FileNotFoundError(f"encoded YAML not found: {yaml_path}")
     if not bundle_path.exists():
-        raise FileNotFoundError(f"bundled CFR text not found: {bundle_path}")
+        raise FileNotFoundError(f"bundled text not found: {bundle_path}")
 
     bundle_text = bundle_path.read_text(encoding="utf-8")
     bundle_by_num = _slice_bundle_by_section(bundle_text)
@@ -90,6 +103,7 @@ def load_sections(
     raw = cast(dict[str, Any], yaml.safe_load(yaml_path.read_text(encoding="utf-8")))
     meta = raw.get("metadata", {})
     publication_date = meta.get("publication_date")
+    fw_label = meta.get("framework", framework)
 
     sections: list[RegulationSection] = []
     for raw_section in raw.get("sections", []):
@@ -113,6 +127,7 @@ def load_sections(
             )
             rule = Rule(
                 id=raw_rule["id"],
+                framework=fw_label,
                 section_id=section_id,
                 text=raw_rule["text"].strip(),
                 rule_type=raw_rule["rule_type"],
@@ -125,6 +140,7 @@ def load_sections(
                     "requires_legitimate_educational_interest", False
                 ),
                 safe_harbor_conditions=raw_rule.get("safe_harbor_conditions", []),
+                risk_tier=raw_rule.get("risk_tier"),
                 citation=citation,
                 severity=raw_rule.get("severity", "block"),
                 rationale=raw_rule["rationale"].strip(),
@@ -133,12 +149,13 @@ def load_sections(
             if audit_sink is not None:
                 emit_event(
                     EventAction.RULE_ENCODED,
-                    payload={"rule_id": rule.id, "section_id": section_id},
+                    payload={"rule_id": rule.id, "section_id": section_id, "framework": fw_label},
                     sink=audit_sink,
                 )
 
         section = RegulationSection(
             id=section_id,
+            framework=fw_label,
             title=raw_section["title"].strip(),
             subpart=raw_section["subpart"],
             full_text=full_text,
@@ -153,6 +170,7 @@ def load_sections(
                 EventAction.SECTION_LOADED,
                 payload={
                     "section_id": section_id,
+                    "framework": fw_label,
                     "rule_count": len(rules),
                     "full_text_hash": section.full_text_hash[:16],
                 },
@@ -162,6 +180,19 @@ def load_sections(
     return sections
 
 
+def load_all_sections(*, audit_sink: Path | None = None) -> list[RegulationSection]:
+    """Load every registered framework's sections, concatenated."""
+    out: list[RegulationSection] = []
+    for name in FRAMEWORKS:
+        out.extend(load_sections(framework=name, audit_sink=audit_sink))
+    return out
+
+
 def flatten_rules(sections: list[RegulationSection]) -> list[Rule]:
-    """Convenience: flatten ``[Section→[Rule]]`` into a single ``list[Rule]``."""
+    """Flatten ``[Section -> [Rule]]`` into a single ``list[Rule]``."""
     return [rule for section in sections for rule in section.rules]
+
+
+def load_all_rules() -> list[Rule]:
+    """Convenience: every rule across every framework."""
+    return flatten_rules(load_all_sections())

@@ -38,5 +38,11 @@ jobs:
       - name: Run unit tests
         run: uv run pytest -ra -q
 
-      - name: Faithfulness gate
+      - name: Faithfulness gate (FERPA + Title IV)
         run: uv run regrails check faithfulness --verbose
+
+      - name: Coverage matrix
+        run: uv run regrails coverage report
+
+      - name: Verify committed decision provenance chain
+        run: uv run regrails audit verify demo/recorded-runs/decisions.chain.jsonl

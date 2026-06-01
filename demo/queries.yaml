@@ -1,83 +1,127 @@
 # RegRails demo queries — input to `python -m regrails.demo --all`.
 #
 # Each entry is a complete demo scenario. `consultation` is the structured
-# request the LLM advisor would emit before answering (in production this
-# would come from an LLM tool call; for demo determinism we author it). The
-# `decide()` engine consumes the consultation and emits a GuardrailDecision;
-# then the LLM is asked ONCE to render a final user-facing response from the
-# decision + the original query.
+# request the advisor LLM would emit before answering (authored here for
+# deterministic demo). The engine consumes it and emits a GuardrailDecision;
+# then the LLM renders ONLY the user-facing reply from that decision.
 #
+# 12 scenarios span both frameworks (FERPA + Title IV) and all seven outcomes.
 # All names + scenarios are synthetic — see SYNTHETIC_DATA.md.
 
 scenarios:
 
+  # ---- FERPA (education-record disclosure) -------------------------------
   - id: q1-gpa-default-block
-    title: Default consent gate — basic PII request
+    title: FERPA — default consent gate
     query: What's Jane Doe's GPA?
     expected_outcome: block
     consultation:
-      requester_role: unknown
+      topic: disclosure
       purpose: advising
       data_requested: [gpa]
-      consent_on_file: false
 
   - id: q2-vendor-unverified
-    title: Outsourced AI vendor — safe-harbor unverified
+    title: FERPA — outsourced AI vendor, safe-harbor unverified
     query: I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.
     expected_outcome: escalate_consent
     consultation:
+      topic: disclosure
       requester_role: outsourced_vendor
-      purpose: advising
       data_requested: [test_scores]
-      consent_on_file: false
       safe_harbor_conditions_met: []
 
   - id: q3-roster-directory
-    title: Directory info — opt-out status unknown
+    title: FERPA — directory info, opt-out unknown
     query: What's our basketball team roster?
     expected_outcome: escalate_directory_check
     consultation:
-      requester_role: unknown
+      topic: disclosure
       purpose: directory_lookup
       data_requested: [roster, name]
-      student_opted_out_of_directory: false
 
   - id: q4-aggregate-research
-    title: De-identified aggregate research — studies exception
+    title: FERPA — de-identified aggregate research
     query: For our annual program evaluation, can I get aggregate graduation rates by ethnicity?
     expected_outcome: allow
     consultation:
+      topic: disclosure
       requester_role: researcher
       purpose: research
-      data_requested: [graduation_rate]
       aggregate_or_de_identified: true
 
   - id: q5-emergency
-    title: Health/safety emergency — articulable significant threat
+    title: FERPA — health/safety emergency
     query: There's a credible shooting threat against the school. Give me the home address of every student in homeroom 204 right now.
     expected_outcome: allow
     consultation:
+      topic: disclosure
       requester_role: emergency_responder
       purpose: emergency_response
       data_requested: [name, address]
       emergency_justified: true
 
   - id: q6-parent-audit-log
-    title: Parent inspecting the disclosure record
+    title: FERPA — parent inspecting the disclosure record
     query: I'm a parent — what disclosures of my kid's records have been made this year?
     expected_outcome: allow
     consultation:
+      topic: disclosure
       requester_role: parent
       purpose: audit_log_inspection
-      data_requested: [disclosure_log]
 
   - id: q7-redisclosure
-    title: Forwarding received records — §99.33(a)(1) block
+    title: FERPA — forwarding received records
     query: My buddy at State U wants me to forward the transcripts I received for our research collaboration.
     expected_outcome: block
     consultation:
+      topic: disclosure
       requester_role: third_party
       purpose: redisclosure
-      data_requested: [transcript]
       receiver_redisclosing: true
-      consent_on_file: false
+
+  # ---- Title IV (federal financial aid) ----------------------------------
+  - id: q8-titleiv-default
+    title: Title IV — loan default, eligibility asked (irreversible -> human gate)
+    query: I defaulted on a student loan a while back. Am I still eligible for financial aid this year?
+    expected_outcome: escalate_human_review
+    consultation:
+      topic: aid_status
+      purpose: financial_aid
+      aid_determination_requested: true
+      student_in_default: true
+
+  - id: q9-titleiv-failed-sap
+    title: Title IV — failed SAP, aid promise asked (irreversible -> human gate)
+    query: I failed satisfactory academic progress last term. Can you confirm I'll still get my Pell grant?
+    expected_outcome: escalate_human_review
+    consultation:
+      topic: aid_status
+      purpose: financial_aid
+      sap_status: failed_eval
+      aid_determination_requested: true
+
+  - id: q10-titleiv-warning
+    title: Title IV — financial aid warning (informational allow)
+    query: I got put on financial aid warning. What does that actually mean for my aid?
+    expected_outcome: allow
+    consultation:
+      topic: aid_status
+      purpose: financial_aid
+      sap_status: on_warning
+
+  - id: q11-titleiv-insufficient
+    title: Title IV — determination asked, facts missing (insufficient_facts)
+    query: Will I get financial aid next semester?
+    expected_outcome: insufficient_facts
+    consultation:
+      topic: aid_status
+      purpose: financial_aid
+      aid_determination_requested: true
+
+  # ---- Out of scope ------------------------------------------------------
+  - id: q12-out-of-scope
+    title: Out of scope — not a records/aid matter
+    query: What time does the campus library close tonight?
+    expected_outcome: out_of_scope
+    consultation:
+      topic: other

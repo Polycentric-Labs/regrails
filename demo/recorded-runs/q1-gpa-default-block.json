@@ -1,9 +1,10 @@
 {
   "scenario_id": "q1-gpa-default-block",
-  "title": "Default consent gate \u2014 basic PII request",
+  "title": "FERPA \u2014 default consent gate",
   "query": "What's Jane Doe's GPA?",
   "consultation": {
     "query": "What's Jane Doe's GPA?",
+    "topic": "disclosure",
     "requester_role": "unknown",
     "purpose": "advising",
     "data_requested": [
@@ -14,18 +15,25 @@
     "emergency_justified": false,
     "safe_harbor_conditions_met": [],
     "receiver_redisclosing": false,
-    "aggregate_or_de_identified": false
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
   },
   "decision": {
-    "id": "b63af24b-63a8-4549-b07d-f318b5ae1210",
+    "id": "ca412af7-df83-4934-b1f7-4374e3178333",
     "query": "What's Jane Doe's GPA?",
-    "timestamp": "2026-05-23T06:31:20.681126Z",
+    "framework": "FERPA",
+    "timestamp": "2026-06-01T20:35:07.828334Z",
     "matched_rules": [
       "FERPA-99.30-1",
       "FERPA-99.30-2",
       "FERPA-99.32-A1"
     ],
     "outcome": "block",
+    "risk_tier": "medium",
+    "human_gate_required": false,
     "llm_response": "Blocked under 34 CFR \u00a7 99.30(a) (default consent rule).\nNo \u00a7 99.31 exception applies and no consent is on file. Obtain signed, dated written consent that specifies records, purpose, and recipient.",
     "citations_emitted": [
       "34-CFR-99.30"
@@ -33,7 +41,8 @@
     "latency_ms": 0,
     "model": ""
   },
-  "advisor_reply": "I apologize, but I cannot disclose Jane Doe's GPA. Under federal student privacy regulations (34 CFR \u00a7 99.30), student academic records can only be released with specific written consent from the student or parent. This protects the student's educational record privacy.",
+  "record_hash": "92c04519a69fb7f70cca4c3433d356f5478b5ee8a522a8a1c3547f485a619d82",
+  "advisor_reply": "I apologize, but I cannot disclose Jane Doe's specific academic information. Under the Family Educational Rights and Privacy Act (FERPA), 34 CFR \u00a7 99.30, student academic records are confidential and can only be released with the student's written consent or under specific legal exceptions. If Jane Doe wants to access her own GPA, she should contact the Registrar's Office directly with a valid student ID.",
   "advisor_model": "anthropic/claude-3.5-haiku",
-  "rendered_at": "2026-05-23T06:31:22.799204+00:00"
+  "rendered_at": "2026-06-01T20:35:11.151205+00:00"
 }

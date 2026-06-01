@@ -1,25 +1,29 @@
 {
   "scenario_id": "q7-redisclosure",
-  "title": "Forwarding received records \u2014 \u00a799.33(a)(1) block",
+  "title": "FERPA \u2014 forwarding received records",
   "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
   "consultation": {
     "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
+    "topic": "disclosure",
     "requester_role": "third_party",
     "purpose": "redisclosure",
-    "data_requested": [
-      "transcript"
-    ],
+    "data_requested": [],
     "consent_on_file": false,
     "student_opted_out_of_directory": false,
     "emergency_justified": false,
     "safe_harbor_conditions_met": [],
     "receiver_redisclosing": true,
-    "aggregate_or_de_identified": false
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
   },
   "decision": {
-    "id": "46015469-4ab0-4846-8827-d0e3f752e1a7",
+    "id": "1f780a50-6276-41a7-94e2-5f305857e82a",
     "query": "My buddy at State U wants me to forward the transcripts I received for our research collaboration.",
-    "timestamp": "2026-05-23T06:31:36.605176Z",
+    "framework": "FERPA",
+    "timestamp": "2026-06-01T20:35:27.344137Z",
     "matched_rules": [
       "FERPA-99.30-1",
       "FERPA-99.30-2",
@@ -28,6 +32,8 @@
       "FERPA-99.33-C"
     ],
     "outcome": "block",
+    "risk_tier": "medium",
+    "human_gate_required": false,
     "llm_response": "Blocked under 34 CFR \u00a7 99.33(a)(1).\nA party that receives PII from an education record cannot redisclose it to any other party without prior consent of the parent or eligible student. Obtain written consent or use one of the \u00a7 99.33(c) carve-outs.",
     "citations_emitted": [
       "34-CFR-99.33"
@@ -35,7 +41,8 @@
     "latency_ms": 0,
     "model": ""
   },
-  "advisor_reply": "I apologize, but I cannot help you forward these transcripts. Under FERPA \u00a799.33, student educational records cannot be shared with third parties without specific written consent from the student. Your research collaboration does not automatically grant permission to redistribute these documents. If you need to share these materials, the student whose transcripts you have must provide explicit written authorization.",
+  "record_hash": "8767d2b5f3a3bd19b542098a026aa91eefa51ca27193cdab1caa502fbf6c4c13",
+  "advisor_reply": "I apologize, but you cannot forward transcripts received from an educational institution to another party without specific written consent from the student. Under FERPA (34 CFR \u00a7 99.33), student educational records cannot be re-disclosed without explicit authorization. Your research collaboration does not override student privacy protections. If you need these transcripts shared, the student must provide direct written permission to both institutions.",
   "advisor_model": "anthropic/claude-3.5-haiku",
-  "rendered_at": "2026-05-23T06:31:39.628512+00:00"
+  "rendered_at": "2026-06-01T20:35:29.942770+00:00"
 }

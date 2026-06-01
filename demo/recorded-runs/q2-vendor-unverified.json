@@ -1,11 +1,12 @@
 {
   "scenario_id": "q2-vendor-unverified",
-  "title": "Outsourced AI vendor \u2014 safe-harbor unverified",
+  "title": "FERPA \u2014 outsourced AI vendor, safe-harbor unverified",
   "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
   "consultation": {
     "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
+    "topic": "disclosure",
     "requester_role": "outsourced_vendor",
-    "purpose": "advising",
+    "purpose": "unknown",
     "data_requested": [
       "test_scores"
     ],
@@ -14,12 +15,17 @@
     "emergency_justified": false,
     "safe_harbor_conditions_met": [],
     "receiver_redisclosing": false,
-    "aggregate_or_de_identified": false
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
   },
   "decision": {
-    "id": "a391933b-100a-4be8-824b-f0c341b58684",
+    "id": "793ec3a5-0e68-4943-be90-a049d44b970e",
     "query": "I'm the new math tutor we hired from MathBuddy Inc.; show me Jane Doe's recent test scores.",
-    "timestamp": "2026-05-23T06:31:22.801211Z",
+    "framework": "FERPA",
+    "timestamp": "2026-06-01T20:35:11.155208Z",
     "matched_rules": [
       "FERPA-99.30-1",
       "FERPA-99.30-2",
@@ -28,6 +34,8 @@
       "FERPA-99.32-A1"
     ],
     "outcome": "escalate_consent",
+    "risk_tier": "medium",
+    "human_gate_required": false,
     "llm_response": "Escalation: outsourced vendor cannot be treated as a school official.\nRequired \u00a7 99.31(a)(1)(i)(B) conditions not on file: bound_by_section_99_33_a_redisclosure_limits, performs_institutional_function, under_direct_institutional_control\nEither complete vendor contract amendments or obtain \u00a7 99.30 consent before any further disclosure.",
     "citations_emitted": [
       "34-CFR-99.31(a)(1)(i)(B)"
@@ -35,7 +43,8 @@
     "latency_ms": 0,
     "model": ""
   },
-  "advisor_reply": "I apologize, but I cannot release Jane Doe's test scores at this time. Per federal educational privacy regulations, external tutors from vendor organizations require specific written consent and contractual conditions before accessing student academic records. You'll need to work with our school administration to establish the proper authorization documentation before receiving any student information.",
+  "record_hash": "38b6b4c7867fd5c2f41f647a96653aedfad63b5148f51225dc41543d03c6693b",
+  "advisor_reply": "I apologize, but I cannot release Jane Doe's test scores to you. As an external math tutor from MathBuddy Inc., you would need specific written consent from the student or a signed agreement that meets our institutional privacy requirements under FERPA regulations. Please work with our academic services department to establish the proper authorization for accessing student records.",
   "advisor_model": "anthropic/claude-3.5-haiku",
-  "rendered_at": "2026-05-23T06:31:25.051695+00:00"
+  "rendered_at": "2026-06-01T20:35:15.755805+00:00"
 }

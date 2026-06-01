@@ -1,6 +1,6 @@
 [project]
 name = "regrails"
-version = "0.1.0"
+version = "0.2.0"
 description = "Codify US federal regulations into machine-readable rules with verbatim-text faithfulness gates and AI-engagement guardrails. POC: FERPA Subpart D (34 CFR Part 99)."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -81,19 +81,25 @@ exclude_lines = [
 ]
 
 [tool.ruff]
-line-length = 100
+line-length = 110
 target-version = "py312"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "A", "C4", "DTZ", "T20", "RET", "SIM"]
-ignore = ["S101"]  # allow assert in tests
+# S101: allow assert. UP042: `class X(str, Enum)` is the deliberate Evidentia pattern
+# for grep-friendly, JSON-stable string enums (StrEnum would change repr semantics).
+ignore = ["S101", "UP042"]
 
 [tool.ruff.lint.per-file-ignores]
 # B008: Typer's idiomatic pattern is `typer.Option(...)` in defaults — false positive
 "src/regrails/cli/*" = ["B008"]
 # A002: Pydantic models routinely use `id` as a field name — not a builtin shadow concern
 "src/regrails/models.py" = ["A002"]
+# E501: the report module embeds an HTML template with unavoidably long lines
+"src/regrails/report.py" = ["E501"]
+# T201: the demo's job IS to print the decision table to stdout
+"src/regrails/demo.py" = ["T201"]
 # S105/S106: hard-coded "secrets" in test fixtures are obviously fake; SIM117: nested
 # context managers in pytest patterns are clearer than combined
 "tests/*" = ["S105", "S106", "SIM117"]

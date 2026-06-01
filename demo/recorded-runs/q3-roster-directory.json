@@ -1,9 +1,10 @@
 {
   "scenario_id": "q3-roster-directory",
-  "title": "Directory info \u2014 opt-out status unknown",
+  "title": "FERPA \u2014 directory info, opt-out unknown",
   "query": "What's our basketball team roster?",
   "consultation": {
     "query": "What's our basketball team roster?",
+    "topic": "disclosure",
     "requester_role": "unknown",
     "purpose": "directory_lookup",
     "data_requested": [
@@ -15,12 +16,17 @@
     "emergency_justified": false,
     "safe_harbor_conditions_met": [],
     "receiver_redisclosing": false,
-    "aggregate_or_de_identified": false
+    "aggregate_or_de_identified": false,
+    "aid_determination_requested": false,
+    "sap_status": "unknown",
+    "student_in_default": null,
+    "appeal_basis_present": false
   },
   "decision": {
-    "id": "e0227d43-3cce-42d1-adcc-a0d57b3127a9",
+    "id": "a9b89b63-9dc7-4dcd-b92c-1f20fec2093f",
     "query": "What's our basketball team roster?",
-    "timestamp": "2026-05-23T06:31:25.054202Z",
+    "framework": "FERPA",
+    "timestamp": "2026-06-01T20:35:15.757806Z",
     "matched_rules": [
       "FERPA-99.30-1",
       "FERPA-99.30-2",
@@ -31,6 +37,8 @@
       "FERPA-99.37-E"
     ],
     "outcome": "escalate_directory_check",
+    "risk_tier": "medium",
+    "human_gate_required": false,
     "llm_response": "Escalation: per-student opt-out status required (34 CFR \u00a7 99.37).\nConfirm with the registrar that the student has NOT opted out of directory-information designation before disclosing. If opted-out, refuse and route through \u00a7 99.30 consent.",
     "citations_emitted": [
       "34-CFR-99.37"
@@ -38,7 +46,8 @@
     "latency_ms": 0,
     "model": ""
   },
-  "advisor_reply": "Before providing the roster, you'll need to verify that the students on the team have not opted out of directory information sharing. Please contact the registrar to confirm the opt-out status for each student. Once that check is complete, I can help you retrieve the roster.",
+  "record_hash": "1480cc047f20ec14210630e24852955e91872e2f276d20ecf1ffff2895b8473e",
+  "advisor_reply": "Hi there! To release our basketball team roster, I first need to confirm our directory information opt-out status. Students have the right to restrict sharing of their athletic participation details. Please contact our Registrar's Office to verify current directory information permissions. They can confirm whether team roster details can be shared publicly or with inquirers.",
   "advisor_model": "anthropic/claude-3.5-haiku",
-  "rendered_at": "2026-05-23T06:31:27.144800+00:00"
+  "rendered_at": "2026-06-01T20:35:18.400787+00:00"
 }
