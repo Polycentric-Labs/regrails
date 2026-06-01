@@ -14,6 +14,7 @@ from .audit_cli import app as audit_app
 from .check_cli import app as check_app
 from .coverage_cli import app as coverage_app
 from .encode_cli import app as encode_app
+from .export_cli import app as export_app
 from .mcp_cli import app as mcp_app
 from .report_cli import app as report_app
 from .research_cli import app as research_app
@@ -31,6 +32,7 @@ app.add_typer(audit_app, name="audit", help="Verify decision-provenance logs.")
 app.add_typer(coverage_app, name="coverage", help="Rule-to-scenario coverage matrix.")
 app.add_typer(report_app, name="report", help="Render a static HTML decision report.")
 app.add_typer(mcp_app, name="mcp", help="Run the MCP server (guardrail as agent tools).")
+app.add_typer(export_app, name="export", help="Export the encoded rules (OSCAL).")
 
 
 @app.command("decide")
@@ -51,6 +53,7 @@ def decide_cmd(
     in_default: bool | None = typer.Option(None, "--in-default/--no-in-default"),
     appeal_basis: bool = typer.Option(False, "--appeal-basis"),
     log: Path | None = typer.Option(None, "--log", help="Append the decision to a hash-chained log."),
+    output_format: str = typer.Option("json", "--format", help="Output format: json | sarif."),
 ) -> None:
     """Run the DETERMINISTIC guardrail engine (no LLM) and print the GuardrailDecision.
 
@@ -76,7 +79,12 @@ def decide_cmd(
     )
     decision = decide(req, load_all_rules())
     payload = decision.model_dump(mode="json")
-    typer.echo(json.dumps(payload, indent=2))
+    if output_format == "sarif":
+        from ..sarif import to_sarif
+
+        typer.echo(json.dumps(to_sarif([decision]), indent=2))
+    else:
+        typer.echo(json.dumps(payload, indent=2))
 
     if log is not None:
         record_hash = append_decision(payload, log)
