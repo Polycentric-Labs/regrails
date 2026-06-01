@@ -1,7 +1,7 @@
 [project]
 name = "regrails"
-version = "0.2.0"
-description = "Codify US federal regulations into machine-readable rules with verbatim-text faithfulness gates and AI-engagement guardrails. POC: FERPA Subpart D (34 CFR Part 99)."
+version = "0.3.0"
+description = "Codify US federal regulations (FERPA + Title IV) into machine-readable rules with verbatim-text faithfulness gates, risk-tiered AI guardrails, and an MCP server. Proof-of-concept."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Apache-2.0" }
@@ -33,6 +33,7 @@ dependencies = [
   "typer>=0.15.0",
   "httpx>=0.27.0",
   "pyyaml>=6.0.0",
+  "mcp[cli]>=1.10.0",
 ]
 
 [project.optional-dependencies]
@@ -46,6 +47,7 @@ dev = [
 
 [project.scripts]
 regrails = "regrails.cli.main:app"
+regrails-mcp = "regrails.mcp_server:serve"
 
 [project.urls]
 Homepage = "https://github.com/Polycentric-Labs/regrails"

@@ -14,6 +14,7 @@ from .audit_cli import app as audit_app
 from .check_cli import app as check_app
 from .coverage_cli import app as coverage_app
 from .encode_cli import app as encode_app
+from .mcp_cli import app as mcp_app
 from .report_cli import app as report_app
 from .research_cli import app as research_app
 
@@ -29,6 +30,7 @@ app.add_typer(research_app, name="research", help="Run Perplexity Sonar research
 app.add_typer(audit_app, name="audit", help="Verify decision-provenance logs.")
 app.add_typer(coverage_app, name="coverage", help="Rule-to-scenario coverage matrix.")
 app.add_typer(report_app, name="report", help="Render a static HTML decision report.")
+app.add_typer(mcp_app, name="mcp", help="Run the MCP server (guardrail as agent tools).")
 
 
 @app.command("decide")
