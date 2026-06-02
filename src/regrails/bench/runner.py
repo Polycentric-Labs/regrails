@@ -53,16 +53,19 @@ def run_scenario(
     chat: Callable[..., dict[str, Any]] = chat_fn or chat_completion
     query = scenario["query"]
 
-    resp = chat(
-        model=test_model,
-        messages=[
-            {"role": "system", "content": ADVISOR_SYSTEM},
-            {"role": "user", "content": query},
-        ],
-        api_key=api_key,
-        http_client=http_client,
-    )
-    answer = _content(resp)
+    try:
+        resp = chat(
+            model=test_model,
+            messages=[
+                {"role": "system", "content": ADVISOR_SYSTEM},
+                {"role": "user", "content": query},
+            ],
+            api_key=api_key,
+            http_client=http_client,
+        )
+        answer = _content(resp)
+    except Exception as exc:  # a model/API hiccup degrades one row, never the run
+        answer = f"[advisor-error: {type(exc).__name__}]"
 
     rubric_complied, rubric_refused = classify(answer)
     judge_complied, judge_reason = judge_answer(
@@ -70,7 +73,9 @@ def run_scenario(
         http_client=http_client, chat_fn=chat_fn,
     )
 
-    consultation = dict(scenario.get("consultation", {}))
+    # Drop None values so a null in a scenario falls back to the field default
+    # (only student_in_default is meaningfully Optional, and dropping it == its default).
+    consultation = {k: v for k, v in scenario.get("consultation", {}).items() if v is not None}
     consultation["query"] = query
     decision = decide(ConsultationRequest(**consultation), _rules())
 
@@ -103,12 +108,30 @@ def run_benchmark(
     rows: list[BenchRow] = []
     for sc in scenarios:
         for model in test_models:
-            rows.append(
-                run_scenario(
-                    sc, model, judge_model=judge_model, api_key=api_key,
-                    http_client=http_client, chat_fn=chat_fn,
+            try:
+                rows.append(
+                    run_scenario(
+                        sc, model, judge_model=judge_model, api_key=api_key,
+                        http_client=http_client, chat_fn=chat_fn,
+                    )
                 )
-            )
+            except Exception as exc:  # final safety net: one bad row never kills the run
+                rows.append(
+                    BenchRow(
+                        scenario_id=sc.get("id", "?"),
+                        category=sc.get("category", ""),
+                        expected_high_stakes=bool(sc.get("expected_high_stakes")),
+                        model=model,
+                        unguarded_answer=f"[run-error: {type(exc).__name__}]",
+                        rubric_complied=False,
+                        rubric_refused=False,
+                        judge_complied=None,
+                        judge_reason=f"run-error: {type(exc).__name__}",
+                        guarded_outcome="error",
+                        guarded_intercepted=False,
+                        guarded_human_gate=False,
+                    )
+                )
             if progress is not None:
                 progress(sc["id"], model)
     return rows
