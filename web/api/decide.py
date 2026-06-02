@@ -11,6 +11,15 @@ import json
 from http.server import BaseHTTPRequestHandler
 from typing import Any
 
+# The consultation normalizer is shared with ``reply.py`` (single source of truth
+# in the ``regrails`` package) so the two endpoints can never drift — see the
+# ``regrails.guardrail.normalize_consultation`` docstring.
+from regrails.guardrail import normalize_consultation
+
+# Reject request bodies larger than this BEFORE reading them (security L-1). A
+# consultation is a small JSON object; 64 KiB is generous headroom.
+MAX_BODY = 64 * 1024
+
 _RULES: Any = None
 
 
@@ -23,10 +32,7 @@ def decide_payload(data: dict[str, Any]) -> tuple[int, dict[str, Any]]:
     if _RULES is None:
         _RULES = load_all_rules()
 
-    cons = {k: v for k, v in (data or {}).items() if v is not None and v != ""}
-    cons.setdefault("query", "")
-    if isinstance(cons.get("data_requested"), str):
-        cons["data_requested"] = [s.strip() for s in cons["data_requested"].split(",") if s.strip()]
+    cons = normalize_consultation(data)
     try:
         req = ConsultationRequest(**cons)
     except Exception as exc:  # invalid enum / shape -> 400, not a crash
@@ -52,7 +58,13 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         length = int(self.headers.get("content-length", 0) or 0)
-        raw = self.rfile.read(length) if length else b"{}"
+        # Reject an oversized body up front, BEFORE reading it (security L-1).
+        if length > MAX_BODY:
+            self._send(413, {"error": "request body too large"})
+            return
+        # Defense-in-depth: never read more than MAX_BODY bytes even if the
+        # declared length is in-range (a client could still over-send).
+        raw = self.rfile.read(min(length, MAX_BODY)) if length else b"{}"
         try:
             data = json.loads(raw or b"{}")
         except json.JSONDecodeError:

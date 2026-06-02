@@ -53,3 +53,31 @@ class TestVerifyPayload:
         ok, problems = verify.verify_payload("not json at all\n{broken")
         assert ok is False
         assert problems
+
+
+class TestExtractChainText:
+    """``_extract_chain_text`` accepts either a ``{"log": "..."}`` JSON wrapper or
+    the raw chain text. ``decoded`` is already a ``str`` (``bytes.decode`` with
+    ``errors="replace"`` never raises), so the only parse failure is a
+    ``JSONDecodeError`` — finding #6 removed the unreachable ``UnicodeDecodeError``.
+    """
+
+    def test_json_wrapper_returns_log_value(self) -> None:
+        raw = b'{"log": "record-1\\nrecord-2"}'
+        assert verify._extract_chain_text(raw) == "record-1\nrecord-2"
+
+    def test_non_json_body_returned_verbatim(self) -> None:
+        # Not JSON -> the JSONDecodeError branch returns the decoded text as-is.
+        raw = b"this is a raw chain line\n{still not valid json"
+        assert verify._extract_chain_text(raw) == "this is a raw chain line\n{still not valid json"
+
+    def test_json_without_log_key_returned_verbatim(self) -> None:
+        raw = b'{"notlog": 1}'
+        assert verify._extract_chain_text(raw) == '{"notlog": 1}'
+
+    def test_invalid_utf8_bytes_do_not_crash(self) -> None:
+        # errors="replace" means undecodable bytes become U+FFFD rather than raising;
+        # the result still flows through json.loads -> JSONDecodeError -> verbatim.
+        raw = b"\xff\xfe bad bytes not json"
+        out = verify._extract_chain_text(raw)
+        assert isinstance(out, str)  # no crash, a string came back

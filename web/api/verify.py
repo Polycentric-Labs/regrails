@@ -18,6 +18,10 @@ from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any
 
+# Reject request bodies larger than this BEFORE reading them (security L-1). A
+# demo hash chain is small; 64 KiB is ample headroom for the sample log.
+MAX_BODY = 64 * 1024
+
 
 def verify_payload(text: str) -> tuple[bool, list[str]]:
     """Verify the chain text ``text`` by delegating to ``regrails.audit.verify_chain``.
@@ -55,7 +59,10 @@ def _extract_chain_text(raw: bytes) -> str:
     decoded = raw.decode("utf-8", errors="replace")
     try:
         parsed = json.loads(decoded)
-    except (json.JSONDecodeError, UnicodeDecodeError):
+    except json.JSONDecodeError:
+        # ``decoded`` is already a ``str`` (``bytes.decode(errors="replace")`` never
+        # raises), so ``json.loads`` here can only raise ``JSONDecodeError`` — a
+        # ``UnicodeDecodeError`` is unreachable on a ``str`` input and was removed.
         return decoded
     if isinstance(parsed, dict):
         log = parsed.get("log")
@@ -82,7 +89,12 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         length = int(self.headers.get("content-length", 0) or 0)
-        raw = self.rfile.read(length) if length else b""
+        # Reject an oversized body up front, BEFORE reading it (security L-1).
+        if length > MAX_BODY:
+            self._send(413, {"error": "request body too large"})
+            return
+        # Defense-in-depth: never read more than MAX_BODY bytes off the wire.
+        raw = self.rfile.read(min(length, MAX_BODY)) if length else b""
         text = _extract_chain_text(raw)
         ok, problems = verify_payload(text)
         self._send(200, {"ok": ok, "problems": problems})

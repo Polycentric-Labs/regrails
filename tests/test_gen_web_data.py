@@ -139,5 +139,32 @@ def test_output_is_byte_stable_across_two_builds(tmp_path: Path) -> None:
     second = tmp_path / "b"
     build_web_data(first)
     build_web_data(second)
-    for name in _EXPECTED_FILES:
+    # The provenance JSONL is byte-stable too (no timestamps/UUIDs in the chain).
+    for name in (*_EXPECTED_FILES, "provenance-sample.jsonl"):
         assert (first / name).read_bytes() == (second / name).read_bytes(), f"{name} not byte-stable"
+
+
+def test_provenance_sample_is_a_three_record_valid_chain(tmp_path: Path) -> None:
+    """The generated provenance sample is a 3-record, clean hash chain whose decision
+    ids/outcomes are the fixed demo set (finding #1: pinned to the pipeline)."""
+    from regrails.audit import verify_chain  # noqa: PLC0415
+
+    build_web_data(tmp_path)
+    chain = tmp_path / "provenance-sample.jsonl"
+    assert chain.exists()
+    assert verify_chain(chain) == (True, [])
+
+    records = [json.loads(line) for line in chain.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert len(records) == 3
+    assert [r["decision"]["id"] for r in records] == ["demo-1", "demo-2", "demo-3"]
+    assert [r["decision"]["outcome"] for r in records] == ["allow", "escalate_human_review", "block"]
+
+
+def test_provenance_sample_is_idempotent_in_place(tmp_path: Path) -> None:
+    """Regenerating into a dir that already has the chain must NOT append duplicates
+    (``append_decision`` appends, so the builder unlinks first)."""
+    build_web_data(tmp_path)
+    build_web_data(tmp_path)  # second build into the SAME dir
+    chain = tmp_path / "provenance-sample.jsonl"
+    lines = [ln for ln in chain.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(lines) == 3  # still 3, not 6

@@ -21,7 +21,7 @@ import time
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -88,6 +88,30 @@ class ConsultationRequest(BaseModel):
     sap_status: SapStatus = "unknown"
     student_in_default: bool | None = None
     appeal_basis_present: bool = False
+
+
+def normalize_consultation(data: dict[str, Any]) -> dict[str, Any]:
+    """Normalize a raw consultation payload before constructing a ``ConsultationRequest``.
+
+    Single source of truth shared by both Vercel endpoints (``web/api/decide.py``
+    and ``web/api/reply.py``) so they can never drift. The normalization, in order:
+
+    1. Drop keys whose value is ``None`` or the empty string ``""`` (so absent /
+       blank form fields fall through to the model's field defaults rather than
+       failing validation).
+    2. Default ``query`` to ``""`` if it was dropped or never supplied.
+    3. If ``data_requested`` arrived as a CSV **string** (an HTML form sends one
+       text field, not a JSON array), split it on commas and strip/​drop blanks.
+
+    The input dict is never mutated; a new dict is returned. ``False`` and ``0``
+    are preserved (they are neither ``None`` nor ``""``) — important for the
+    boolean FERPA/Title IV facts.
+    """
+    cons = {k: v for k, v in (data or {}).items() if v is not None and v != ""}
+    cons.setdefault("query", "")
+    if isinstance(cons.get("data_requested"), str):
+        cons["data_requested"] = [s.strip() for s in cons["data_requested"].split(",") if s.strip()]
+    return cons
 
 
 # ---------------------------------------------------------------------------

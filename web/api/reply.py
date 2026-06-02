@@ -40,8 +40,19 @@ from typing import Any
 # the live-reply path always needs them, and importing ``advisor_render`` here
 # is what lets callers/tests patch ``reply.advisor_render`` to mock the model.
 from regrails.encode import load_all_rules
-from regrails.guardrail import ConsultationRequest, decide
+
+# ``normalize_consultation`` is the SHARED normalizer (also used by ``decide.py``);
+# importing it from the package — not re-implementing it here — is the fix for
+# review finding #5 (the two endpoints used to carry duplicate copies).
+from regrails.guardrail import ConsultationRequest, decide, normalize_consultation
 from regrails.llm import advisor_render
+
+# Reject request bodies larger than this BEFORE reading them (security L-1), and
+# clamp an over-long ``query`` to ``MAX_QUERY`` before it reaches ``advisor_render``
+# so a giant prompt can't run up LLM token spend. The engine still sees the full
+# query (the clamp is only on the LLM-bound copy).
+MAX_BODY = 64 * 1024
+MAX_QUERY = 8 * 1024
 
 # Rules are loaded once per warm instance (mirrors decide.py's caching).
 _RULES: Any = None
@@ -131,15 +142,6 @@ def _rate_limited() -> bool:
     return len(_CALL_TIMESTAMPS) >= cap
 
 
-def _normalize_consultation(data: dict[str, Any]) -> dict[str, Any]:
-    """Mirror ``decide.py``'s normalizer: drop None/"" and split a CSV string."""
-    cons = {k: v for k, v in (data or {}).items() if v is not None and v != ""}
-    cons.setdefault("query", "")
-    if isinstance(cons.get("data_requested"), str):
-        cons["data_requested"] = [s.strip() for s in cons["data_requested"].split(",") if s.strip()]
-    return cons
-
-
 def reply_payload(data: dict[str, Any], *, api_key: str | None) -> tuple[int, dict[str, Any]]:
     """Normalize -> decide -> branch (LLM vs templated) -> build the response.
 
@@ -154,7 +156,7 @@ def reply_payload(data: dict[str, Any], *, api_key: str | None) -> tuple[int, di
     if _RULES is None:
         _RULES = load_all_rules()
 
-    cons = _normalize_consultation(data)
+    cons = normalize_consultation(data)
     try:
         req = ConsultationRequest(**cons)
     except Exception as exc:  # invalid enum / shape -> 400, not a crash
@@ -180,9 +182,14 @@ def reply_payload(data: dict[str, Any], *, api_key: str | None) -> tuple[int, di
             "model_used": None,
         }
 
+    # Clamp the query handed to the model so a giant prompt can't run up token
+    # spend (security L-1). The engine above already saw the full ``req.query``;
+    # only this LLM-bound copy is bounded to MAX_QUERY.
+    llm_query = req.query[:MAX_QUERY]
+
     # Try the (cheap) model; any failure degrades to the templated reply.
     try:
-        text, model_used = advisor_render(query=req.query, decision=decision, api_key=api_key)
+        text, model_used = advisor_render(query=llm_query, decision=decision, api_key=api_key)
         _CALL_TIMESTAMPS.append(time.monotonic())
     except Exception:  # provider down / timeout / empty content -> never break the page
         return 200, {
@@ -217,7 +224,12 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         length = int(self.headers.get("content-length", 0) or 0)
-        raw = self.rfile.read(length) if length else b"{}"
+        # Reject an oversized body up front, BEFORE reading it (security L-1).
+        if length > MAX_BODY:
+            self._send(413, {"error": "request body too large"})
+            return
+        # Defense-in-depth: never read more than MAX_BODY bytes off the wire.
+        raw = self.rfile.read(min(length, MAX_BODY)) if length else b"{}"
         try:
             data = json.loads(raw or b"{}")
         except json.JSONDecodeError:

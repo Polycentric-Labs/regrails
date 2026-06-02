@@ -9,7 +9,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist",
-    sourcemap: true,
+    // Don't ship original TS source maps to the public demo (security L-4).
+    sourcemap: false,
   },
   server: {
     port: 5173,

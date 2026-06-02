@@ -16,12 +16,12 @@ export type DataName =
 
 export class DataLoadError extends Error {
   constructor(
-    public readonly name: DataName,
+    public readonly dataName: DataName,
     public readonly status: number,
     message: string,
   ) {
     super(message);
-    this.name = "DataLoadError" as DataName; // satisfy Error.name typing
+    this.name = "DataLoadError";
   }
 }
 

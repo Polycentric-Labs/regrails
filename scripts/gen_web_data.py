@@ -1,12 +1,13 @@
 """Anti-drift data pipeline: dump RegRails' OWN package data to static JSON.
 
-The RegRails web platform reads these six files instead of re-implementing any
-of the engine in TypeScript. Because the JSON is generated *from the installed
-``regrails`` package* — the same loaders, the same OSCAL/SARIF emitters, the same
-``regrails.bench.report`` statistics the CLI uses — the website can never drift
-from the CLI. A committed copy lives at ``web/public/data/*.json``; the
-``tests/test_web_data_parity.py`` gate fails CI if a fresh regeneration differs,
-so a stale website is impossible to merge.
+The RegRails web platform reads these generated files instead of re-implementing
+any of the engine in TypeScript: six deterministic JSON files plus the
+``provenance-sample.jsonl`` hash chain. Because every file is generated *from the
+installed ``regrails`` package* — the same loaders, the same OSCAL/SARIF emitters,
+the same ``regrails.bench.report`` statistics, and the same ``audit.append_decision``
+hash-chaining the CLI uses — the website can never drift from the CLI. A committed
+copy lives at ``web/public/data/``; the ``tests/test_web_data_parity.py`` gate
+fails CI if a fresh regeneration differs, so a stale website is impossible to merge.
 
 Determinism: every file is serialised with
 ``json.dumps(obj, indent=2, ensure_ascii=True, sort_keys=True)`` and all volatile
@@ -29,6 +30,7 @@ from typing import Any
 
 # ``regrails`` ships a ``py.typed`` marker, so it type-checks as a typed package.
 from regrails import __version__
+from regrails.audit import append_decision
 from regrails.bench import INTERCEPT_OUTCOMES, BenchRow
 from regrails.bench.judge import JUDGE_MODEL_DEFAULT
 from regrails.bench.report import aggregate, wilson
@@ -53,6 +55,37 @@ _OUTPUT_FILES = (
     "oscal.json",
     "sarif.json",
     "methodology.json",
+    "provenance-sample.jsonl",
+)
+
+# Fixed decision dicts for the committed provenance hash-chain sample. These exact
+# dicts (in this exact order) are what ``append_decision`` hashes; changing any
+# value or order would change every downstream ``record_hash`` and the committed
+# ``web/public/data/provenance-sample.jsonl``. The deterministic generation here
+# is what finally PINS that hand-checked sample to a pipeline (no field is volatile,
+# so two runs are byte-identical), so ``test_web_data_parity`` now guards it too.
+_PROVENANCE_SAMPLE_DECISIONS: tuple[dict[str, Any], ...] = (
+    {
+        "id": "demo-1",
+        "outcome": "allow",
+        "framework": "FERPA",
+        "risk_tier": "low",
+        "query": "What are the library hours tonight?",
+    },
+    {
+        "id": "demo-2",
+        "outcome": "escalate_human_review",
+        "framework": "Title IV",
+        "risk_tier": "high",
+        "query": "I defaulted on a loan; am I still eligible for aid?",
+    },
+    {
+        "id": "demo-3",
+        "outcome": "block",
+        "framework": "FERPA",
+        "risk_tier": "medium",
+        "query": "Email me Jane Doe full transcript.",
+    },
 )
 
 # ---------------------------------------------------------------------------
@@ -413,13 +446,39 @@ def build_methodology() -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# provenance-sample.jsonl
+# ---------------------------------------------------------------------------
+
+
+def build_provenance_sample(out_dir: Path) -> Path:
+    """Deterministically (re)build the provenance hash-chain sample via the package.
+
+    Writes ``provenance-sample.jsonl`` into ``out_dir`` by feeding the fixed
+    ``_PROVENANCE_SAMPLE_DECISIONS`` through ``regrails.audit.append_decision`` — the
+    SAME hash-chaining the CLI uses — so the website's "tamper-evident provenance"
+    sample is a true projection of the engine, not a hand-written artifact validated
+    by nothing. The decisions carry no timestamps/UUIDs, so the output is byte-stable.
+
+    ``append_decision`` *appends*, so any pre-existing file is removed first to keep
+    a regeneration in place idempotent. Returns the written path.
+    """
+    sink = out_dir / "provenance-sample.jsonl"
+    if sink.exists():
+        sink.unlink()
+    for decision in _PROVENANCE_SAMPLE_DECISIONS:
+        append_decision(decision, sink)
+    return sink
+
+
+# ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
 
 
 def build_web_data(out_dir: Path) -> None:
-    """Write the six static JSON files the RegRails website consumes into ``out_dir``.
+    """Write the static data files the RegRails website consumes into ``out_dir``.
 
+    Six deterministic JSON files plus the ``provenance-sample.jsonl`` hash chain.
     Pulls everything from the installed ``regrails`` package + the committed bench
     data + docs, so the website is a pure projection of the CLI's own data."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -434,6 +493,11 @@ def build_web_data(out_dir: Path) -> None:
     _write(out_dir, "oscal.json", build_oscal(sections))
     _write(out_dir, "sarif.json", build_sarif(rules))
     _write(out_dir, "methodology.json", build_methodology())
+
+    # The provenance hash-chain sample is emitted via the package's own
+    # ``append_decision`` (not the JSON ``_write`` helper) so its bytes match what
+    # the CLI ``regrails audit`` would produce, and so it is now pipeline-pinned.
+    build_provenance_sample(out_dir)
 
 
 def main(argv: list[str] | None = None) -> int:

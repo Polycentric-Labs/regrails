@@ -47,9 +47,14 @@ export interface DecisionCardProps {
   children?: ReactNode;
 }
 
+/** Outcomes that should NOT carry the destructive (red) card accent. */
 const ALLOWED_OUTCOMES = new Set(["allow", "out_of_scope"]);
 
-/** Outcomes that should NOT carry the destructive (red) card accent. */
+/**
+ * True when the decision intercepted the request — any outcome outside
+ * ALLOWED_OUTCOMES — so the card carries the destructive accent. An explicit
+ * `override` (the `intercepted` prop) wins over the derived value.
+ */
 function isIntercept(decision: GuardrailDecision, override?: boolean): boolean {
   if (typeof override === "boolean") return override;
   return !ALLOWED_OUTCOMES.has(decision.outcome);
