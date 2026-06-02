@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RegRails — live guardrail demo</title>
+<style>
+  :root { --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:#0f172a; color:#fff; padding:22px 28px; }
+  header h1 { margin:0 0 4px; font-size:21px; }
+  header p { margin:0; color:#cbd5e1; font-size:13px; max-width:760px; }
+  .wrap { max-width:920px; margin:0 auto; padding:22px 28px 60px; }
+  .presets { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 18px; }
+  .chip { border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 12px; font-size:13px; cursor:pointer; }
+  .chip:hover { border-color:#94a3b8; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  label { font-size:12px; font-weight:600; color:#334155; display:block; margin:8px 0 3px; }
+  textarea, select, input[type=text] { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; font-size:14px; background:#fff; }
+  textarea { min-height:58px; resize:vertical; }
+  .checks { display:flex; flex-wrap:wrap; gap:14px; margin-top:10px; font-size:13px; }
+  .checks label { display:inline-flex; align-items:center; gap:6px; font-weight:500; margin:0; }
+  button.run { margin-top:14px; background:#2563eb; color:#fff; border:0; border-radius:8px; padding:10px 18px; font-size:15px; font-weight:600; cursor:pointer; }
+  button.run:hover { background:#1d4ed8; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-top:18px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .badges { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+  .badge { color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  code { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-size:12px; }
+  .reply { background:#f8fafc; border-left:3px solid #cbd5e1; padding:10px 12px; margin:10px 0 0; font-size:14px; white-space:pre-wrap; }
+  .meta { font-size:13px; color:#334155; margin:4px 0; }
+  footer { font-size:12px; color:var(--muted); margin-top:22px; }
+  a { color:#2563eb; }
+</style>
+</head>
+<body>
+<header>
+  <h1>RegRails — live guardrail demo</h1>
+  <p>Type a question a student or staffer might ask. A deterministic engine (FERPA + Title IV) decides
+     <b>before any LLM speaks</b> — no model, no API key, just rules. Synthetic data only; not legal advice.</p>
+</header>
+<div class="wrap">
+  <div class="presets" id="presets"></div>
+
+  <div class="grid">
+    <div>
+      <label>Query</label>
+      <textarea id="query" placeholder="e.g. I defaulted on a loan; am I still eligible for aid?"></textarea>
+    </div>
+    <div>
+      <label>Topic</label>
+      <select id="topic">
+        <option value="unknown">unknown (&rarr; FERPA)</option>
+        <option value="disclosure">disclosure (FERPA records)</option>
+        <option value="aid_status">aid_status (Title IV)</option>
+        <option value="other">other (out of scope)</option>
+      </select>
+      <label>Requester role</label>
+      <select id="requester_role">
+        <option value="unknown">unknown</option>
+        <option>school_official</option><option>outsourced_vendor</option><option>parent</option>
+        <option>eligible_student</option><option>researcher</option><option>emergency_responder</option>
+        <option>law_enforcement</option><option>third_party</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <label>Purpose</label>
+      <select id="purpose">
+        <option value="unknown">unknown</option>
+        <option>advising</option><option>research</option><option>financial_aid</option>
+        <option>audit_log_inspection</option><option>emergency_response</option><option>redisclosure</option>
+        <option>subpoena_compliance</option><option>directory_lookup</option>
+      </select>
+    </div>
+    <div>
+      <label>SAP status (Title IV)</label>
+      <select id="sap_status">
+        <option value="unknown">unknown</option>
+        <option>meeting</option><option>failed_eval</option><option>on_warning</option><option>on_probation</option>
+      </select>
+    </div>
+  </div>
+  <label>Data requested (comma-separated, e.g. gpa,transcript,roster)</label>
+  <input type="text" id="data_requested" placeholder="gpa" />
+  <div class="checks">
+    <label><input type="checkbox" id="aid_determination_requested" /> aid determination requested</label>
+    <label><input type="checkbox" id="student_in_default" /> student in default</label>
+    <label><input type="checkbox" id="consent_on_file" /> consent on file</label>
+    <label><input type="checkbox" id="student_opted_out_of_directory" /> opted out of directory</label>
+    <label><input type="checkbox" id="emergency_justified" /> emergency justified</label>
+  </div>
+  <button class="run" id="run">Consult the guardrail &rarr;</button>
+
+  <div id="result"></div>
+
+  <footer>
+    Engine-only demo of <a href="https://github.com/Polycentric-Labs/regrails">Polycentric-Labs/regrails</a>.
+    The LLM is never in the decision path. <code>pip install regrails</code>.
+  </footer>
+</div>
+
+<script>
+const OUTCOME_COLOR = {
+  allow:"#1a7f37", block:"#b91c1c", escalate_consent:"#b45309", escalate_directory_check:"#b45309",
+  escalate_human_review:"#7c3aed", insufficient_facts:"#6b7280", out_of_scope:"#2563eb"
+};
+const RISK_COLOR = { low:"#1a7f37", medium:"#b45309", high:"#b91c1c" };
+
+const PRESETS = [
+  { label:"GPA ask", c:{ query:"What's Jane Doe's GPA?", topic:"disclosure", data_requested:"gpa" } },
+  { label:"Outsourced vendor", c:{ query:"I'm the new tutor from MathBuddy Inc.; show Jane's test scores.", topic:"disclosure", requester_role:"outsourced_vendor", data_requested:"test_scores" } },
+  { label:"Team roster", c:{ query:"What's our basketball team roster?", topic:"disclosure", purpose:"directory_lookup", data_requested:"roster,name" } },
+  { label:"Emergency", c:{ query:"Credible threat — give me homeroom 204 addresses now.", topic:"disclosure", requester_role:"emergency_responder", purpose:"emergency_response", emergency_justified:true, data_requested:"name,address" } },
+  { label:"Loan default", c:{ query:"I defaulted on a loan; am I still eligible for aid?", topic:"aid_status", aid_determination_requested:true, student_in_default:true } },
+  { label:"Failed SAP", c:{ query:"I failed SAP — confirm I'll keep my Pell grant?", topic:"aid_status", sap_status:"failed_eval", aid_determination_requested:true } },
+  { label:"Vague aid ask", c:{ query:"Will I get financial aid next semester?", topic:"aid_status", aid_determination_requested:true } },
+  { label:"Out of scope", c:{ query:"What time does the library close tonight?", topic:"other" } },
+];
+
+const $ = id => document.getElementById(id);
+const CHECKS = ["aid_determination_requested","student_in_default","consent_on_file","student_opted_out_of_directory","emergency_justified"];
+
+// Build DOM safely (no innerHTML): el(tag, props, children) with text via textContent.
+function el(tag, props, kids){
+  const n = document.createElement(tag);
+  if (props) for (const k in props){
+    const v = props[k];
+    if (v == null) continue;
+    if (k === "class") n.className = v;
+    else if (k === "style") n.style.cssText = v;
+    else if (k === "text") n.textContent = v;
+    else n.setAttribute(k, v);
+  }
+  if (kids) (Array.isArray(kids)?kids:[kids]).forEach(c => { if (c != null) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  return n;
+}
+function setCard(node){ const r = $("result"); while (r.firstChild) r.removeChild(r.firstChild); r.appendChild(node); }
+
+function fill(c){
+  $("query").value = c.query || "";
+  ["topic","requester_role","purpose","sap_status"].forEach(f => { $(f).value = c[f] || "unknown"; });
+  $("data_requested").value = c.data_requested || "";
+  CHECKS.forEach(f => { $(f).checked = !!c[f]; });
+}
+function collect(){
+  const c = { query: $("query").value };
+  ["topic","requester_role","purpose","sap_status"].forEach(f => { if ($(f).value && $(f).value !== "unknown") c[f] = $(f).value; });
+  const dr = $("data_requested").value.trim(); if (dr) c.data_requested = dr;
+  CHECKS.forEach(f => { if ($(f).checked) c[f] = true; });
+  return c;
+}
+function render(d){
+  const oc = OUTCOME_COLOR[d.outcome] || "#374151", rc = RISK_COLOR[d.risk_tier] || "#374151";
+  const badges = el("div", { class:"badges" }, [
+    el("span", { class:"badge", style:"background:"+oc, text:d.outcome }),
+    el("span", { class:"badge", style:"background:"+rc, text:"risk: "+d.risk_tier }),
+    d.human_gate_required ? el("span", { class:"badge", style:"background:#7c3aed", text:"HUMAN GATE" }) : null,
+    el("span", { style:"color:#64748b;font-size:13px", text:"framework: "+d.framework }),
+  ]);
+  const citeWrap = el("div", { class:"meta" }, [ el("b", { text:"Citations: " }) ]);
+  const cites = d.citations_emitted || [];
+  if (cites.length) cites.forEach(c => { citeWrap.appendChild(el("code", { text:c })); citeWrap.appendChild(document.createTextNode(" ")); });
+  else citeWrap.appendChild(el("em", { text:"none" }));
+  const matched = el("div", { class:"meta" }, [ el("b", { text:"Matched rules: " }), (d.matched_rules||[]).join(", ") || "none" ]);
+  const reply = el("div", { class:"reply", text:d.llm_response || "" });
+  setCard(el("div", { class:"card" }, [ badges, citeWrap, matched, reply ]));
+}
+async function run(){
+  setCard(el("div", { class:"card", text:"Consulting…" }));
+  try {
+    const r = await fetch("/api/decide", { method:"POST", headers:{ "content-type":"application/json" }, body: JSON.stringify(collect()) });
+    const d = await r.json();
+    if (d.error) { setCard(el("div", { class:"card", text:"Error: "+d.error })); return; }
+    render(d);
+  } catch (e) { setCard(el("div", { class:"card", text:"Request failed: "+String(e) })); }
+}
+const pc = $("presets");
+PRESETS.forEach(p => { const b = el("button", { class:"chip", text:p.label }); b.onclick = () => { fill(p.c); run(); }; pc.appendChild(b); });
+$("run").onclick = run;
+fill(PRESETS[4].c);
+</script>
+</body>
+</html>
