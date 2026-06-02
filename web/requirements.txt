@@ -1,1 +1,1 @@
-regrails==0.3.1
+regrails==0.4.0

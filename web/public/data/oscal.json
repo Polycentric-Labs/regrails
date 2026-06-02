@@ -1344,7 +1344,7 @@
     "metadata": {
       "oscal-version": "1.1.2",
       "title": "RegRails encoded rules (FERPA + Title IV subset)",
-      "version": "0.3.1"
+      "version": "0.4.0"
     },
     "uuid": "03a8f7ae-fa56-5895-a356-ac88dae620ce"
   }

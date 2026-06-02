@@ -1,7 +1,7 @@
 # RegRails release runbook
 
 RegRails ships to PyPI on a **tag push**. Pushing an annotated, signed tag like
-`v0.3.1` triggers `.github/workflows/release.yml`, which runs the tag-time gate
+`v0.4.0` triggers `.github/workflows/release.yml`, which runs the tag-time gate
 (S2), then builds, attests (SLSA + PEP 740), and publishes via a PyPI **Trusted
 Publisher** (OIDC — no long-lived token). **Push-to-`main` does not publish; only a
 `v*` tag does.**

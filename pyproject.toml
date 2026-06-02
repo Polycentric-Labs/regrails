@@ -1,6 +1,6 @@
 [project]
 name = "regrails"
-version = "0.3.1"
+version = "0.4.0"
 description = "Codify US federal regulations (FERPA + Title IV) into machine-readable rules with verbatim-text faithfulness gates, risk-tiered AI guardrails, and an MCP server. Proof-of-concept."
 readme = "README.md"
 requires-python = ">=3.12"

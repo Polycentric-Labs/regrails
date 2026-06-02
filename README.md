@@ -7,7 +7,7 @@ A proof-of-concept for turning institutional-policy and regulatory requirements 
 - **FERPA** — 34 CFR Part 99, Subpart D (education-record disclosure)
 - **Title IV** — 34 CFR Part 668 subset: Satisfactory Academic Progress (§ 668.34) + student eligibility (§ 668.32)
 
-**37 machine-readable rules across 8 sections**, each pinned to verbatim CFR text by a faithfulness gate; a deterministic engine that emits a typed `GuardrailDecision` with a **risk tier** and a **human-gate** flag; tamper-evident **hash-chained decision provenance**; and a **22-scenario golden corpus** with a published coverage matrix. Apache-2.0, Python 3.12+, `uv`-managed. 185 tests; ruff + mypy-strict clean.
+**37 machine-readable rules across 8 sections**, each pinned to verbatim CFR text by a faithfulness gate; a deterministic engine that emits a typed `GuardrailDecision` with a **risk tier** and a **human-gate** flag; tamper-evident **hash-chained decision provenance**; and a **22-scenario golden corpus** with a published coverage matrix. Apache-2.0, Python 3.12+, `uv`-managed. 280 tests; ruff + mypy-strict clean.
 
 > This is a proof-of-concept, not a compliance product and not legal advice. It encodes *selected* provisions with verbatim traceability for the rules included, and routes high-stakes determinations to a human. See **[Limitations](#limitations)**.
 
@@ -63,6 +63,25 @@ That boundary — *what an AI can automate and what requires human judgment or i
 | 12 | — | "What time does the library close?" | **out_of_scope** | low | — | — |
 
 Seven outcomes: `allow` · `block` · `escalate_consent` · `escalate_directory_check` · `escalate_human_review` · `insufficient_facts` · `out_of_scope`.
+
+---
+
+## Web platform
+
+A live, clickable demo runs at **[regrails.polycentriclabs.com](https://regrails.polycentriclabs.com)** — a React SPA with 10 routes, all rendering the package's own generated data (so the site can't drift from the CLI):
+
+- **Live demo** — type a query; the deterministic engine decides first, then an advisor reply is rendered (engine → advisor).
+- **Rules** — all 37 rules (FERPA + Title IV) with citations, risk tiers, and verbatim CFR text.
+- **Coverage** — the 31/37 rule→scenario matrix and the 6 gap IDs.
+- **Benchmark** — the held-out eval results.
+- **Methodology** — scope, label provenance, and limitations.
+- **Provenance** — a live hash-chain verifier (the same verdict as `audit verify`).
+- **Exports** — OSCAL 1.1.2 + SARIF 2.1.0 viewers.
+- **MCP** — the three agent tools.
+- **Action** — the CI gate.
+- **About** — thesis + links.
+
+The engine endpoint (`/api/decide`) runs with no LLM and no key; the optional advisor reply (`/api/reply`) is engine-gated — only `allow` / `out_of_scope` outcomes ever reach a model. Synthetic data only.
 
 ---
 
@@ -126,7 +145,7 @@ uv run python -m regrails.demo --all
 uv run python -m regrails.demo --replay demo/recorded-runs/
 uv run regrails audit verify demo/recorded-runs/decisions.chain.jsonl
 
-uv run pytest -q                            # 185 tests
+uv run pytest -q                            # 280 tests
 ```
 
 ---
@@ -162,7 +181,7 @@ regrails/
 │   ├── llm.py           # advisor renderer (OpenRouter; retry + fallback)
 │   ├── coverage.py · report.py · demo.py
 │   └── cli/             # regrails {check, encode, decide, coverage, audit, report, research}
-└── tests/               # 185 tests incl. golden corpus + tamper-detection
+└── tests/               # 280 tests incl. golden corpus + tamper-detection
 ```
 
 ---

@@ -28,7 +28,7 @@ inputs:
   version:
     description: "regrails version to install from PyPI."
     required: false
-    default: "0.3.1"
+    default: "0.4.0"
   sarif-path:
     description: "Where to write the SARIF report."
     required: false

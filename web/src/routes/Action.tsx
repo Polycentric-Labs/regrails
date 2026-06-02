@@ -15,7 +15,7 @@ import CodeBlock from "../ui/CodeBlock";
 import { outcomeColor } from "../lib/outcomes";
 
 /** Pinned tag the canonical usage references (matches action.yml's default + requirements.txt). */
-const VERSION = "0.3.1";
+const VERSION = "0.4.0";
 const USES = `Polycentric-Labs/regrails/docs/action@v${VERSION}`;
 
 /** The canonical one-line usage snippet. */
@@ -62,7 +62,7 @@ inputs:
   version:
     description: "regrails version to install from PyPI."
     required: false
-    default: "0.3.1"
+    default: "0.4.0"
   sarif-path:
     description: "Where to write the SARIF report."
     required: false
@@ -144,7 +144,7 @@ jobs:
       # eligibility. RegRails returns escalate_human_review -> this FAILS the job,
       # so an automated "advisor" pipeline cannot ship the answer without a human.
       - name: RegRails gate
-        uses: Polycentric-Labs/regrails/docs/action@v0.3.1
+        uses: Polycentric-Labs/regrails/docs/action@v0.4.0
         with:
           query: "I defaulted on a loan a while back. Am I still eligible for aid this year?"
           topic: "aid_status"
