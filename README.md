@@ -7,9 +7,25 @@ A proof-of-concept for turning institutional-policy and regulatory requirements 
 - **FERPA** — 34 CFR Part 99, Subpart D (education-record disclosure)
 - **Title IV** — 34 CFR Part 668 subset: Satisfactory Academic Progress (§ 668.34) + student eligibility (§ 668.32)
 
-**37 machine-readable rules across 8 sections**, each pinned to verbatim CFR text by a faithfulness gate; a deterministic engine that emits a typed `GuardrailDecision` with a **risk tier** and a **human-gate** flag; tamper-evident **hash-chained decision provenance**; and a **22-scenario golden corpus** with a published coverage matrix. Apache-2.0, Python 3.12+, `uv`-managed. 159 tests; ruff + mypy-strict clean.
+**37 machine-readable rules across 8 sections**, each pinned to verbatim CFR text by a faithfulness gate; a deterministic engine that emits a typed `GuardrailDecision` with a **risk tier** and a **human-gate** flag; tamper-evident **hash-chained decision provenance**; and a **22-scenario golden corpus** with a published coverage matrix. Apache-2.0, Python 3.12+, `uv`-managed. 185 tests; ruff + mypy-strict clean.
 
 > This is a proof-of-concept, not a compliance product and not legal advice. It encodes *selected* provisions with verbatim traceability for the rules included, and routes high-stakes determinations to a human. See **[Limitations](#limitations)**.
+
+---
+
+## Install + verify in a minute
+
+```bash
+pip install regrails
+
+regrails check faithfulness     # 37/37 rules verbatim-faithful to the bundled CFR text
+regrails decide -q "I defaulted; am I eligible for aid?" --topic aid_status --aid-determination --in-default
+regrails export oscal           # OSCAL 1.1.2-shaped catalog of the 37 rules
+regrails mcp serve              # MCP server: consult_guardrail / list_rules / check_faithfulness
+regrails bench report           # the held-out with/without-guardrail pilot
+```
+
+Beyond the engine, v0.3 adds: an **MCP server** (the guardrail as an agent tool — `consult_guardrail`, engine-only, so an AI agent consults it *before* answering); **signed PyPI** releases (PEP 740 + SLSA attestations); **OSCAL** + **SARIF** export; a reusable **[GitHub Action](docs/action/)** that fails a CI job on `block` / `escalate_human_review`; a **[methodology + limitations doc](docs/METHODOLOGY.md)** (scope boundary, label provenance, the 6 coverage gaps listed by ID); and a held-out **[benchmark](docs/EVAL.md)** (24 independently-authored scenarios × GPT‑5.5 / Gemini 3.1 Pro / Grok 4.3 / DeepSeek, labeled by an independent Claude judge): the guardrail allows **7/7** benign asks where the unguarded models over-refuse 2–4/7, and intercepts **15/17** high-stakes — the 2 it allows are FERPA-permitted (emergency disclosure, parental inspection), surfaced honestly rather than hidden.
 
 ---
 
@@ -108,7 +124,7 @@ uv run python -m regrails.demo --all
 uv run python -m regrails.demo --replay demo/recorded-runs/
 uv run regrails audit verify demo/recorded-runs/decisions.chain.jsonl
 
-uv run pytest -q                            # 159 tests
+uv run pytest -q                            # 185 tests
 ```
 
 ---
@@ -144,7 +160,7 @@ regrails/
 │   ├── llm.py           # advisor renderer (OpenRouter; retry + fallback)
 │   ├── coverage.py · report.py · demo.py
 │   └── cli/             # regrails {check, encode, decide, coverage, audit, report, research}
-└── tests/               # 159 tests incl. golden corpus + tamper-detection
+└── tests/               # 185 tests incl. golden corpus + tamper-detection
 ```
 
 ---
@@ -175,4 +191,4 @@ Apache-2.0. See [LICENSE](LICENSE).
 
 This project was developed alongside AI platforms.
 
-Models used: Claude Opus 4.8, GPT-5.5, Gemini 3.1 Pro, Grok 4.3, Perplexity Sonar (Deep Research + Pro)
+Models used: Claude Opus 4.8, GPT-5.5, Gemini 3.1 Pro, Grok 4.3, DeepSeek, Perplexity Sonar (Deep Research + Pro)
