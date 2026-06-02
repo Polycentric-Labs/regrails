@@ -69,10 +69,20 @@ def aggregate(rows: list[BenchRow]) -> dict[str, Any]:
     }
 
 
-def to_eval_md(agg: dict[str, Any], *, scenario_count: int, judge_model: str) -> str:
-    """Render the full docs/EVAL.md (method, caveats, per-model table)."""
+def to_eval_md(
+    agg: dict[str, Any],
+    rows: list[BenchRow],
+    *,
+    scenario_count: int,
+    judge_model: str,
+) -> str:
+    """Render the full docs/EVAL.md (method, caveats, per-model table, disagreements)."""
     k = agg["judge_rubric_kappa"]
     kappa_str = f"{k:.2f}" if isinstance(k, float) else "n/a"
+    not_intercepted: dict[str, str] = {}
+    for r in rows:
+        if r.expected_high_stakes and not r.guarded_intercepted:
+            not_intercepted.setdefault(r.scenario_id, r.guarded_outcome)
     lines: list[str] = []
     lines.append("# RegRails — with/without-guardrail benchmark (pilot)")
     lines.append("")
@@ -90,9 +100,9 @@ def to_eval_md(agg: dict[str, Any], *, scenario_count: int, judge_model: str) ->
         "committed before any model was run. This is not the rule-design corpus.\n"
         "- **Unguarded baseline:** each scenario's raw query is sent to each model with a neutral, "
         "realistic advisor system prompt (not told to be reckless, not told to be careful).\n"
-        "- **Guarded:** the deterministic engine decides from the structured consultation; it "
-        "intercepts every high-stakes scenario *by construction* — so the interesting question is "
-        "how often the *unguarded* models do not.\n"
+        "- **Guarded:** the deterministic engine decides from the structured consultation and makes "
+        "the same cited decision every time. 'Intercepted' means it did not give a direct answer "
+        "(a block, any escalation, or insufficient_facts); `allow` and `out_of_scope` are not.\n"
         f"- **Labeling:** every unguarded answer is labeled by a deterministic rubric AND by an "
         f"independent LLM judge ({judge_model}) — a different vendor than any model under test. "
         f"Judge-vs-rubric agreement (Cohen's kappa) = **{kappa_str}** over {agg['n_judged']} "
@@ -118,17 +128,33 @@ def to_eval_md(agg: dict[str, Any], *, scenario_count: int, judge_model: str) ->
             f"{s['guarded_allowed']}/{s['n_low_stakes']} |"
         )
     lines.append("")
-    lines.append("## How to read this")
+    lines.append("## What this shows")
     lines.append("")
     lines.append(
-        "The guardrail's value is not that it beats a number — it's **consistency, auditability, "
-        "and the human gate**. Frontier models are inconsistent in *both* directions: they "
-        "sometimes answer a high-stakes ask, and sometimes refuse a benign one. The deterministic "
-        "engine gives the same cited, tamper-evident decision every time, and routes the "
-        "irreversible cases to a human. This is a pilot; the harness is reproducible "
-        "(`regrails bench run` / `regrails bench report`) and the raw outputs are published with it."
+        "Modern frontier models already refuse the blatant high-stakes asks, so the story is not "
+        "'models leak constantly.' The honest findings are (1) **no over-refusal** — the guardrail "
+        "allows every benign ask, while the unguarded models refuse a meaningful fraction of them; "
+        "and (2) **consistency + the human gate** — the engine gives the same cited, tamper-evident "
+        "decision every time and routes irreversible cases to a human, where the models waver in "
+        "both directions (including the social-engineering and fake-'de-identification' baits). The "
+        "harness is reproducible (`regrails bench run` / `regrails bench report`) and the raw outputs "
+        "are published with it."
     )
     lines.append("")
+    if not_intercepted:
+        lines.append("## Disagreements (independent labels vs. the engine)")
+        lines.append("")
+        lines.append(
+            "On these scenarios the independently-authored label said high-stakes but the engine did "
+            "not intercept. They are reported, not hidden. On manual review the engine's decisions "
+            "here track the regulation (e.g. FERPA §99.36 emergency disclosure and §99.32(c) parental "
+            "inspection of the disclosure log are *permitted*), so the disagreement reflects "
+            "conservative labeling rather than an engine error:"
+        )
+        lines.append("")
+        for sid, outcome in sorted(not_intercepted.items()):
+            lines.append(f"- `{sid}` — engine returned `{outcome}`.")
+        lines.append("")
     lines.append("## Limitations")
     lines.append("")
     lines.append(

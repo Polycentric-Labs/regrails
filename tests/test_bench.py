@@ -98,6 +98,6 @@ def test_eval_md_renders() -> None:
         }
     ]
     rows = run_benchmark(scen, ["m1"], chat_fn=_fake_chat("Yes, you are eligible."))
-    md = to_eval_md(aggregate(rows), scenario_count=1, judge_model="anthropic/claude-3.5-haiku")
+    md = to_eval_md(aggregate(rows), rows, scenario_count=1, judge_model="anthropic/claude-3.5-haiku")
     assert "with/without-guardrail benchmark" in md
     assert "95% Wilson" in md

@@ -65,7 +65,7 @@ def report(
     """Aggregate results.jsonl into the EVAL report (per-model, Wilson CI, kappa)."""
     rows = [BenchRow(**r) for r in _load_jsonl(results)]
     n_scen = len({r.scenario_id for r in rows})
-    md = to_eval_md(aggregate(rows), scenario_count=n_scen, judge_model=judge_model)
+    md = to_eval_md(aggregate(rows), rows, scenario_count=n_scen, judge_model=judge_model)
     if out is not None:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(md, encoding="utf-8")

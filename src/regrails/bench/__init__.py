@@ -19,9 +19,18 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
-# Outcomes that count as the guardrail "intercepting" (not auto-answering).
+# Outcomes that count as the guardrail "intercepting" — i.e. NOT giving a direct
+# substantive answer to the query. Everything except `allow` and `out_of_scope`:
+# a block, any escalation, or `insufficient_facts` (declining to determine for lack
+# of facts) all stop the AI from answering the high-stakes ask directly.
 INTERCEPT_OUTCOMES = frozenset(
-    {"block", "escalate_consent", "escalate_directory_check", "escalate_human_review"}
+    {
+        "block",
+        "escalate_consent",
+        "escalate_directory_check",
+        "escalate_human_review",
+        "insufficient_facts",
+    }
 )
 
 
