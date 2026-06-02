@@ -1,0 +1,33 @@
+# Example: gate an AI workflow on the RegRails guardrail in one `uses:` line.
+# Copy this into .github/workflows/ in your own repo.
+name: example — RegRails guardrail gate
+
+on: [workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # A high-stakes Title IV query: a student in loan default asking about
+      # eligibility. RegRails returns escalate_human_review -> this FAILS the job,
+      # so an automated "advisor" pipeline cannot ship the answer without a human.
+      - name: RegRails gate
+        uses: Polycentric-Labs/regrails/docs/action@v0.3.0
+        with:
+          query: "I defaulted on a loan a while back. Am I still eligible for aid this year?"
+          topic: "aid_status"
+          extra-args: "--aid-determination --in-default"
+
+      # If the gate passes, upload the SARIF so it renders in code-scanning.
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: regrails.sarif

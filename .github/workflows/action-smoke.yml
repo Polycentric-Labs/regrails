@@ -1,0 +1,50 @@
+name: action-smoke
+
+# Self-tests the composite action in docs/action: a block decision must FAIL the
+# gate, and an out-of-scope decision must PASS it.
+on:
+  push:
+    branches: [main]
+    paths: ["docs/action/**", ".github/workflows/action-smoke.yml"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  block-must-fail:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: gate
+        continue-on-error: true
+        uses: ./docs/action
+        with:
+          query: "What's Jane Doe's GPA?"
+          data: "gpa"
+      - name: assert the gate failed on a block
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.gate.outcome }}
+          DECISION: ${{ steps.gate.outputs.outcome }}
+        run: |
+          if [ "$STEP_OUTCOME" != "failure" ]; then
+            echo "::error::expected the gate to FAIL on a block decision (got step outcome=$STEP_OUTCOME)"
+            exit 1
+          fi
+          echo "OK: gate failed on block as expected (decision=$DECISION)."
+
+  out-of-scope-must-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: ./docs/action
+        with:
+          query: "What time does the campus library close tonight?"
+          topic: "other"

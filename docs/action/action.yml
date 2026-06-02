@@ -1,0 +1,85 @@
+name: "RegRails guardrail gate"
+description: "Gate an AI/automation workflow on the RegRails FERPA + Title IV guardrail. Fails the job on block / escalate_human_review and writes a SARIF report."
+author: "Allen Byrd"
+branding:
+  icon: "shield"
+  color: "purple"
+
+inputs:
+  query:
+    description: "The user-facing query the AI workflow is about to act on."
+    required: true
+  topic:
+    description: "disclosure | aid_status | other | unknown"
+    required: false
+    default: "unknown"
+  data:
+    description: "Comma-separated data_requested items (e.g. 'gpa,transcript')."
+    required: false
+    default: ""
+  extra-args:
+    description: "Extra flags passed verbatim to `regrails decide` (e.g. '--aid-determination --in-default')."
+    required: false
+    default: ""
+  fail-on:
+    description: "Comma-separated outcomes that fail the job."
+    required: false
+    default: "block,escalate_human_review"
+  version:
+    description: "regrails version to install from PyPI."
+    required: false
+    default: "0.3.0"
+  sarif-path:
+    description: "Where to write the SARIF report."
+    required: false
+    default: "regrails.sarif"
+
+outputs:
+  outcome:
+    description: "The GuardrailDecision outcome."
+    value: ${{ steps.decide.outputs.outcome }}
+  risk-tier:
+    description: "The decision's risk tier."
+    value: ${{ steps.decide.outputs.risk_tier }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install regrails
+      shell: bash
+      env:
+        RG_VERSION: ${{ inputs.version }}
+      run: python -m pip install --quiet "regrails==${RG_VERSION}"
+
+    - name: Consult the guardrail
+      id: decide
+      shell: bash
+      env:
+        RG_QUERY: ${{ inputs.query }}
+        RG_TOPIC: ${{ inputs.topic }}
+        RG_DATA: ${{ inputs.data }}
+        RG_EXTRA: ${{ inputs.extra-args }}
+        RG_SARIF: ${{ inputs.sarif-path }}
+      run: |
+        regrails decide -q "$RG_QUERY" --topic "$RG_TOPIC" --data "$RG_DATA" $RG_EXTRA > rg_decision.json
+        regrails decide -q "$RG_QUERY" --topic "$RG_TOPIC" --data "$RG_DATA" $RG_EXTRA --format sarif > "$RG_SARIF"
+        outcome=$(python -c "import json;print(json.load(open('rg_decision.json'))['outcome'])")
+        risk=$(python -c "import json;print(json.load(open('rg_decision.json'))['risk_tier'])")
+        echo "outcome=$outcome" >> "$GITHUB_OUTPUT"
+        echo "risk_tier=$risk" >> "$GITHUB_OUTPUT"
+        echo "RegRails decision: outcome=$outcome risk=$risk"
+
+    - name: Enforce the gate
+      shell: bash
+      env:
+        RG_OUTCOME: ${{ steps.decide.outputs.outcome }}
+        RG_FAILON: ${{ inputs.fail-on }}
+      run: |
+        IFS=',' read -ra failon <<< "$RG_FAILON"
+        for o in "${failon[@]}"; do
+          if [ "$RG_OUTCOME" = "$o" ]; then
+            echo "::error::RegRails gate: outcome '$RG_OUTCOME' is in fail-on list; failing the job."
+            exit 1
+          fi
+        done
+        echo "RegRails gate passed (outcome=$RG_OUTCOME)."
