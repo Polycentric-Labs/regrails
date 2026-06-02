@@ -11,6 +11,7 @@ from ..audit import EventAction, append_decision, emit_event
 from ..encode import load_all_rules
 from ..guardrail import ConsultationRequest, decide
 from .audit_cli import app as audit_app
+from .bench_cli import app as bench_app
 from .check_cli import app as check_app
 from .coverage_cli import app as coverage_app
 from .encode_cli import app as encode_app
@@ -33,6 +34,7 @@ app.add_typer(coverage_app, name="coverage", help="Rule-to-scenario coverage mat
 app.add_typer(report_app, name="report", help="Render a static HTML decision report.")
 app.add_typer(mcp_app, name="mcp", help="Run the MCP server (guardrail as agent tools).")
 app.add_typer(export_app, name="export", help="Export the encoded rules (OSCAL).")
+app.add_typer(bench_app, name="bench", help="With/without-guardrail benchmark (pilot).")
 
 
 @app.command("decide")
