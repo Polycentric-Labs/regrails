@@ -21,9 +21,11 @@ pip install regrails
 regrails check faithfulness     # 37/37 rules verbatim-faithful to the bundled CFR text
 regrails decide -q "I defaulted; am I eligible for aid?" --topic aid_status --aid-determination --in-default
 regrails export oscal           # OSCAL 1.1.2-shaped catalog of the 37 rules
+regrails decide -q "What's Jane's GPA?" --data gpa --format sarif   # SARIF 2.1.0
 regrails mcp serve              # MCP server: consult_guardrail / list_rules / check_faithfulness
-regrails bench report           # the held-out with/without-guardrail pilot
 ```
+
+(The held-out benchmark — `regrails bench run` / `regrails bench report` — is a repo-dev command; clone the repo to reproduce it. The published results are in [`docs/EVAL.md`](docs/EVAL.md) and on [HuggingFace](https://huggingface.co/datasets/Polycentric-Labs/regrails-eval).)
 
 Beyond the engine, v0.3 adds: an **MCP server** (the guardrail as an agent tool — `consult_guardrail`, engine-only, so an AI agent consults it *before* answering); **signed PyPI** releases (PEP 740 + SLSA attestations); **OSCAL** + **SARIF** export; a reusable **[GitHub Action](docs/action/)** that fails a CI job on `block` / `escalate_human_review`; a **[methodology + limitations doc](docs/METHODOLOGY.md)** (scope boundary, label provenance, the 6 coverage gaps listed by ID); and a held-out **[benchmark](docs/EVAL.md)** (24 independently-authored scenarios × GPT‑5.5 / Gemini 3.1 Pro / Grok 4.3 / DeepSeek, labeled by an independent Claude judge): the guardrail allows **7/7** benign asks where the unguarded models over-refuse 2–4/7, and intercepts **15/17** high-stakes — the 2 it allows are FERPA-permitted (emergency disclosure, parental inspection), surfaced honestly rather than hidden.
 

@@ -19,7 +19,7 @@ jobs:
       # eligibility. RegRails returns escalate_human_review -> this FAILS the job,
       # so an automated "advisor" pipeline cannot ship the answer without a human.
       - name: RegRails gate
-        uses: Polycentric-Labs/regrails/docs/action@v0.3.0
+        uses: Polycentric-Labs/regrails/docs/action@v0.3.1
         with:
           query: "I defaulted on a loan a while back. Am I still eligible for aid this year?"
           topic: "aid_status"
