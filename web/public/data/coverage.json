@@ -1,0 +1,558 @@
+{
+  "gaps": [
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.30 \u2014 electronic-consent validity",
+      "rule_id": "FERPA-99.30-3",
+      "section": "34-CFR-99.30"
+    },
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.31 \u2014 audit/evaluation exception",
+      "rule_id": "FERPA-99.31-A3",
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.31 \u2014 financial-aid exception",
+      "rule_id": "FERPA-99.31-A4",
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.31 \u2014 judicial order / subpoena",
+      "rule_id": "FERPA-99.31-A9",
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.33 \u2014 purpose-limitation on received PII",
+      "rule_id": "FERPA-99.33-A2",
+      "section": "34-CFR-99.33"
+    },
+    {
+      "framework": "FERPA",
+      "rationale": "\u00a7 99.36 \u2014 disciplinary-action information in records",
+      "rule_id": "FERPA-99.36-B1",
+      "section": "34-CFR-99.36"
+    }
+  ],
+  "matrix": [
+    {
+      "framework": "FERPA",
+      "n_scenarios": 12,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.30-1",
+      "scenarios": [
+        "ferpa-aggregate-research-allow",
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate",
+        "ferpa-emergency-allow",
+        "ferpa-empty-default-block",
+        "ferpa-gpa-default-block",
+        "ferpa-parent-auditlog-allow",
+        "ferpa-redisclosure-block",
+        "ferpa-ssn-combined-block",
+        "ferpa-studies-noagreement-escalate",
+        "ferpa-vendor-unverified",
+        "ferpa-vendor-verified"
+      ],
+      "section": "34-CFR-99.30"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 12,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.30-2",
+      "scenarios": [
+        "ferpa-aggregate-research-allow",
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate",
+        "ferpa-emergency-allow",
+        "ferpa-empty-default-block",
+        "ferpa-gpa-default-block",
+        "ferpa-parent-auditlog-allow",
+        "ferpa-redisclosure-block",
+        "ferpa-ssn-combined-block",
+        "ferpa-studies-noagreement-escalate",
+        "ferpa-vendor-unverified",
+        "ferpa-vendor-verified"
+      ],
+      "section": "34-CFR-99.30"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.30-3",
+      "scenarios": [],
+      "section": "34-CFR-99.30"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A1",
+      "scenarios": [
+        "ferpa-vendor-unverified",
+        "ferpa-vendor-verified"
+      ],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A10",
+      "scenarios": [
+        "ferpa-emergency-allow"
+      ],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A1B",
+      "scenarios": [
+        "ferpa-vendor-unverified",
+        "ferpa-vendor-verified"
+      ],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A3",
+      "scenarios": [],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A4",
+      "scenarios": [],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A6",
+      "scenarios": [
+        "ferpa-aggregate-research-allow",
+        "ferpa-studies-noagreement-escalate"
+      ],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-A9",
+      "scenarios": [],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.31-B1",
+      "scenarios": [
+        "ferpa-aggregate-research-allow"
+      ],
+      "section": "34-CFR-99.31"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 12,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.32-A1",
+      "scenarios": [
+        "ferpa-aggregate-research-allow",
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate",
+        "ferpa-emergency-allow",
+        "ferpa-empty-default-block",
+        "ferpa-gpa-default-block",
+        "ferpa-parent-auditlog-allow",
+        "ferpa-redisclosure-block",
+        "ferpa-ssn-combined-block",
+        "ferpa-studies-noagreement-escalate",
+        "ferpa-vendor-unverified",
+        "ferpa-vendor-verified"
+      ],
+      "section": "34-CFR-99.32"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.32-A5",
+      "scenarios": [
+        "ferpa-emergency-allow",
+        "ferpa-parent-auditlog-allow"
+      ],
+      "section": "34-CFR-99.32"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.33-A1",
+      "scenarios": [
+        "ferpa-redisclosure-block"
+      ],
+      "section": "34-CFR-99.33"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.33-A2",
+      "scenarios": [],
+      "section": "34-CFR-99.33"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.33-C",
+      "scenarios": [
+        "ferpa-redisclosure-block"
+      ],
+      "section": "34-CFR-99.33"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.36-A",
+      "scenarios": [
+        "ferpa-emergency-allow"
+      ],
+      "section": "34-CFR-99.36"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 0,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.36-B1",
+      "scenarios": [],
+      "section": "34-CFR-99.36"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 1,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.36-C",
+      "scenarios": [
+        "ferpa-emergency-allow"
+      ],
+      "section": "34-CFR-99.36"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.37-A",
+      "scenarios": [
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate"
+      ],
+      "section": "34-CFR-99.37"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.37-A-OPT-OUT",
+      "scenarios": [
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate"
+      ],
+      "section": "34-CFR-99.37"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 2,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.37-C",
+      "scenarios": [
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate"
+      ],
+      "section": "34-CFR-99.37"
+    },
+    {
+      "framework": "FERPA",
+      "n_scenarios": 3,
+      "risk_tier": "-",
+      "rule_id": "FERPA-99.37-E",
+      "scenarios": [
+        "ferpa-directory-optedout-block",
+        "ferpa-directory-roster-escalate",
+        "ferpa-ssn-combined-block"
+      ],
+      "section": "34-CFR-99.37"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.32-A1i",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.32-E1",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.32-F",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "high",
+      "rule_id": "TIV-668.32-G1",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.32-G2",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.32-I",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.32"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "low",
+      "rule_id": "TIV-668.34-A1",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "low",
+      "rule_id": "TIV-668.34-A3i",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.34-A4ii",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "high",
+      "rule_id": "TIV-668.34-A7",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.34-A8i",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.34-A8ii",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.34-A9ii",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    },
+    {
+      "framework": "Title IV",
+      "n_scenarios": 9,
+      "risk_tier": "medium",
+      "rule_id": "TIV-668.34-MAXTF",
+      "scenarios": [
+        "tiv-determination-insufficient-facts",
+        "tiv-eligibility-determination-humanreview",
+        "tiv-failed-sap-determination-humanreview",
+        "tiv-general-question-allow",
+        "tiv-loan-default-humanreview",
+        "tiv-probation-allow",
+        "tiv-probation-appeal-allow",
+        "tiv-sap-explainer-allow",
+        "tiv-warning-allow"
+      ],
+      "section": "34-CFR-668.34"
+    }
+  ],
+  "n_covered": 31,
+  "n_gaps": 6,
+  "n_golden_scenarios": 22,
+  "n_rules": 37
+}

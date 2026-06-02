@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "error",
+          "message": {
+            "text": "Blocked under 34 CFR \u00a7 99.30(a) (default consent rule).\nNo \u00a7 99.31 exception applies and no consent is on file. Obtain signed, dated written consent that specifies records, purpose, and recipient."
+          },
+          "properties": {
+            "citations": [
+              "34-CFR-99.30"
+            ],
+            "framework": "FERPA",
+            "human_gate_required": false,
+            "outcome": "block",
+            "risk_tier": "medium"
+          },
+          "ruleId": "34-CFR-99.30"
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Escalation: per-student opt-out status required (34 CFR \u00a7 99.37).\nConfirm with the registrar that the student has NOT opted out of directory-information designation before disclosing. If opted-out, refuse and route through \u00a7 99.30 consent."
+          },
+          "properties": {
+            "citations": [
+              "34-CFR-99.37"
+            ],
+            "framework": "FERPA",
+            "human_gate_required": false,
+            "outcome": "escalate_directory_check",
+            "risk_tier": "medium"
+          },
+          "ruleId": "34-CFR-99.37"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "A student in default on a Title IV loan is not eligible for further Title IV aid under 34 CFR \u00a7 668.32(g)(1), absent a \u00a7 668.35 exception.\nDo not confirm eligibility. Route the student to the financial-aid office to resolve the default (e.g. rehabilitation or consolidation) before any aid determination is made."
+          },
+          "properties": {
+            "citations": [
+              "34-CFR-668.32(g)(1)"
+            ],
+            "framework": "Title IV",
+            "human_gate_required": true,
+            "outcome": "escalate_human_review",
+            "risk_tier": "high"
+          },
+          "ruleId": "34-CFR-668.32(g)(1)"
+        },
+        {
+          "level": "none",
+          "message": {
+            "text": "You may explain that a student on financial aid warning may continue to receive Title IV aid for one payment period despite a SAP determination (34 CFR \u00a7 668.34(a)(8)(i)); no appeal is required for the warning itself.\nDo not extend the warning or promise aid beyond that payment period; the institution assigns and ends the status."
+          },
+          "properties": {
+            "citations": [
+              "34-CFR-668.34(a)(8)(i)"
+            ],
+            "framework": "Title IV",
+            "human_gate_required": false,
+            "outcome": "allow",
+            "risk_tier": "medium"
+          },
+          "ruleId": "34-CFR-668.34(a)(8)(i)"
+        },
+        {
+          "level": "none",
+          "message": {
+            "text": "Out of scope: this query is not a regulated student-records or financial-aid matter, so no RegRails rule applies.\nAn advisor may answer it normally without a compliance gate."
+          },
+          "properties": {
+            "citations": [],
+            "framework": "n/a",
+            "human_gate_required": false,
+            "outcome": "out_of_scope",
+            "risk_tier": "low"
+          },
+          "ruleId": "n/a"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/Polycentric-Labs/regrails",
+          "name": "RegRails",
+          "rules": [],
+          "version": "0.3.1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

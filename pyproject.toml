@@ -107,6 +107,8 @@ ignore = ["S101", "UP042"]
 "src/regrails/bench/report.py" = ["E501"]
 # T201: the demo's job IS to print the decision table to stdout
 "src/regrails/demo.py" = ["T201"]
+# T201: scripts are CLIs that legitimately print status to stdout
+"scripts/*" = ["T201"]
 # S105/S106: hard-coded "secrets" in test fixtures are obviously fake; SIM117: nested
 # context managers in pytest patterns are clearer than combined
 "tests/*" = ["S105", "S106", "SIM117"]
@@ -125,3 +127,10 @@ files = ["src/regrails", "tests"]
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+# web/api/verify.py + reply.py are standalone Vercel functions, imported via sys.path
+# shims in their tests; mypy resolves them by bare module name and can't locate them.
+# The modules themselves are type-checked directly (MYPYPATH=src) during the web build.
+module = ["verify", "reply"]
+ignore_missing_imports = true

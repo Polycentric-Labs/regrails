@@ -1,0 +1,1351 @@
+{
+  "catalog": {
+    "back-matter": {
+      "resources": [
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "7702662457c0452c254b0aa16dcc75d2d7d5a1aee2b1f973f8ea8ba721320cab"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.30"
+            }
+          ],
+          "title": "34-CFR-99.30",
+          "uuid": "a6bd1edd-0f04-511e-a373-7a238001c4bd"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "d6861950918fedc7ef856f3b2c5ff4928d8d471d156d7f440a28280ef3bc6cdb"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.31"
+            }
+          ],
+          "title": "34-CFR-99.31",
+          "uuid": "5d652363-48f6-5057-9dce-e66645489b73"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "f6a5208918742d4ac5bede87b1fcc6e9cc1d61edf27057f75d9398bc8613bf44"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.32"
+            }
+          ],
+          "title": "34-CFR-99.32",
+          "uuid": "3fb17bad-77d7-5670-bdfa-3bfe74cd226a"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "f0afdc165c6ce58c39862eb1a8bc398f22c4136feaf7a5ca3e7487b7b3c4b1b5"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.33"
+            }
+          ],
+          "title": "34-CFR-99.33",
+          "uuid": "89595e02-4231-5972-87fd-99d3cbb29afa"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "b0149cce006fcbbf21b85aa9e65a2ea9152eec9a2e7fd71fe5beac249bc7d5e2"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.36"
+            }
+          ],
+          "title": "34-CFR-99.36",
+          "uuid": "4ce901d8-77a3-5a8e-a9b3-513aaabef3a9"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "63cc55a96b5c6920491fe4a701a36336b020448b0ee854aa3bcbad686486ab20"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/99.37"
+            }
+          ],
+          "title": "34-CFR-99.37",
+          "uuid": "cddeaa0e-6208-5fe9-92dc-8b3ce9cc97c2"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "241ef2701bba9d2cbacf8bd551decc8871dcded76020a0fc3696c888deec8e85"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/668.34"
+            }
+          ],
+          "title": "34-CFR-668.34",
+          "uuid": "e8ce11aa-4fd3-52c4-ab00-d52b3411feb3"
+        },
+        {
+          "rlinks": [
+            {
+              "hashes": [
+                {
+                  "algorithm": "SHA-256",
+                  "value": "c04c15cc1d6a92a43033f3d894d249af36ee87e4cd4db954844fd3beb9c98d71"
+                }
+              ],
+              "href": "https://www.law.cornell.edu/cfr/text/34/668.32"
+            }
+          ],
+          "title": "34-CFR-668.32",
+          "uuid": "47980e0b-8beb-5b47-b33e-ae0e4ca94afb"
+        }
+      ]
+    },
+    "groups": [
+      {
+        "controls": [
+          {
+            "id": "ferpa-99.30-1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.30",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.30-1-stmt",
+                "name": "statement",
+                "prose": "FERPA's default rule: no disclosure of PII without prior consent. All other rules in Subpart D are exceptions to or qualifications of this default."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "An educational agency or institution must obtain prior signed-and-dated written consent from the parent or eligible student before disclosing personally identifiable information from a student's education records, unless a \u00a7 99.31 exception applies."
+          },
+          {
+            "id": "ferpa-99.30-2",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.30",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.30-2-stmt",
+                "name": "statement",
+                "prose": "A consent that omits records, purpose, or recipient is defective under \u00a7 99.30(b) and the guardrail must escalate for human FERPA-officer review before treating the disclosure as authorized."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "consent_required"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Valid written consent for disclosure must specify which records may be disclosed, state the purpose of the disclosure, and identify the party or class of parties to whom the disclosure may be made."
+          },
+          {
+            "id": "ferpa-99.30-3",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.30",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.30-3-stmt",
+                "name": "statement",
+                "prose": "E-consent that fails either authentication or affirmative approval is invalid under \u00a7 99.30(d); the guardrail must not treat such a flow as satisfying the consent gate."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "definition"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Electronic consent is acceptable only when it identifies and authenticates a particular person as the source AND indicates that person's approval of the information contained in the consent."
+          },
+          {
+            "id": "ferpa-99.31-a1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a1-stmt",
+                "name": "statement",
+                "prose": "The keystone \u00a7 99.31(a)(1) carve-out. Allows internal information flow, but the agency must have a documented LEI determination and use reasonable access controls per \u00a7 99.31(a)(1)(ii)."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure to other school officials (including teachers) within the agency or institution whom the agency or institution has determined have legitimate educational interests may proceed without consent."
+          },
+          {
+            "id": "ferpa-99.31-a1b",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a1b-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(1)(i)(B). The 3 cumulative conditions are the standard test DOE applies to ed-tech and AI vendor contracts; a missing contractual element defeats school-official status."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "An outsourced contractor, consultant, volunteer, or other third party may be treated as a school official ONLY if it performs an institutional function the agency would otherwise use employees for, is under direct institutional control over use+maintenance of records, and is bound by \u00a7 99.33(a) redisclosure limits. An AI vendor failing any condition cannot rely on this prong."
+          },
+          {
+            "id": "ferpa-99.31-a3",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a3-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(3) audit/evaluation exception. The guardrail allows but must require \u00a7 99.35 compliance (purpose-bound, recordkeeping, redisclosure limits)."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure to authorized representatives of the US Comptroller General, the US Attorney General, the Secretary of Education, or State and local educational authorities may proceed without consent, subject to \u00a7 99.35."
+          },
+          {
+            "id": "ferpa-99.31-a4",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a4-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(4). Critical for Title IV operations: the four enumerated purposes are exhaustive, so out-of-scope financial-aid queries do not qualify."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure in connection with financial aid for which the student has applied or received aid is permitted, where the information is necessary to determine eligibility, amount, conditions, or to enforce terms."
+          },
+          {
+            "id": "ferpa-99.31-a6",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a6-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(6) studies exception \u2014 heavily litigated. Without the four contractual conditions in \u00a7 99.31(a)(6)(iii)(C)(1)-(4), the exception does not apply."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure to organizations conducting studies for or on behalf of educational agencies \u2014 to develop/validate/administer predictive tests, administer student aid programs, or improve instruction \u2014 is permitted ONLY under a written agreement that limits use, prohibits personal identification by outsiders, and requires destruction when no longer needed."
+          },
+          {
+            "id": "ferpa-99.31-a9",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a9-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(9). The advance-notice obligation is the operator-facing obligation the guardrail must surface BEFORE disclosure proceeds."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure to comply with a judicial order or lawfully issued subpoena is permitted only if the institution makes a reasonable effort to notify the parent or eligible student in advance (with narrow exceptions for sealed grand-jury, law-enforcement, and counter-terrorism orders)."
+          },
+          {
+            "id": "ferpa-99.31-a10",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-a10-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(a)(10) cross-references \u00a7 99.36 for the operative standard (articulable + significant threat)."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Disclosure in connection with a health or safety emergency may proceed under the conditions described in \u00a7 99.36 \u2014 see rules FERPA-99.36-A through FERPA-99.36-C for the operating gate."
+          },
+          {
+            "id": "ferpa-99.31-b1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.31",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.31-b1-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.31(b)(1). The \"reasonable determination\" standard requires institution-level judgment; the guardrail surfaces this for the operator rather than auto-approving."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "De-identified records may be released without consent IF the institution has made a reasonable determination that the student's identity is not personally identifiable, accounting for other reasonably available info."
+          },
+          {
+            "id": "ferpa-99.32-a1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.32-a1-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.32(a)(1) + (a)(3). Every allow decision the guardrail emits must carry an audit-log obligation pointing here; the obligation is part of the disclosure itself, not an aftermarket nicety."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "The agency must maintain a record of each request for access and each disclosure of PII from a student's education records, including the names of recipients and their legitimate interests."
+          },
+          {
+            "id": "ferpa-99.32-a5",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.32-a5-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.32(a)(5). Emergency disclosures carry the strongest after-the-fact recordkeeping obligation because they bypass the normal consent flow."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "When disclosing under the health-or-safety emergency exception (\u00a7 99.31(a)(10) / \u00a7 99.36) the institution must record both the articulable and significant threat that formed the basis AND the parties disclosed to."
+          },
+          {
+            "id": "ferpa-99.33-a1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.33",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.33-a1-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.33(a)(1). This is the rule that blocks an AI advisor (or any downstream recipient) from forwarding records it received \u2014 a critical guardrail-as-recipient case."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "A party that received PII from an education record may NOT redisclose that information to any other party without the prior consent of the parent or eligible student."
+          },
+          {
+            "id": "ferpa-99.33-a2",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.33",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.33-a2-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.33(a)(2). Purpose limitation: secondary use is a redisclosure-class violation even within the recipient organization."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Officers, employees, and agents of a party receiving PII under \u00a7 99.33(a)(1) may use the information ONLY for the purposes for which the original disclosure was made."
+          },
+          {
+            "id": "ferpa-99.33-c",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.33",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.33-c-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.33(c). The eight enumerated exception subsections are excluded from the redisclosure default; guardrail must reach allow-with-audit rather than block when one of these applies."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "The \u00a7 99.33(a) redisclosure prohibition does NOT apply to disclosures made under \u00a7\u00a7 99.31(a)(8), (9), (11), (12), (14), (15), and (16), nor to outcome disclosures postsecondary institutions must make under the Clery Act for sexual offense disciplinary proceedings."
+          },
+          {
+            "id": "ferpa-99.36-a",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.36",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.36-a-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.36(a). Highest priority in the guardrail's outcome cascade \u2014 emergency time-pressure cases must short-circuit the consent path."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "In a health-or-safety emergency, the institution may disclose PII to appropriate parties (including parents of an eligible student) if knowledge of the information is necessary to protect the health or safety of the student or other individuals."
+          },
+          {
+            "id": "ferpa-99.36-c",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.36",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.36-c-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.36(c) \u2014 the operative legal standard, more rigorous than \"any emergency.\" Bare-feel emergencies do not satisfy."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "definition"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "The institution must find an \"articulable and significant threat\" to health or safety based on the totality of circumstances; if a rational basis existed at the time, the Department will not second-guess the determination."
+          },
+          {
+            "id": "ferpa-99.36-b1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.36",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.36-b1-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.36(b)(1). Allows discipline-related safety information to live in the student record, supporting downstream \u00a7 99.36(b)(2)+(3) sharing with teachers/officials with LEI."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "The institution may include in a student's education records appropriate information about disciplinary action taken for conduct posing a significant risk to the safety or well-being of the student, other students, or the school community."
+          },
+          {
+            "id": "ferpa-99.37-a",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.37",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.37-a-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.37(a). Directory disclosures are the only branch in the cascade where the guardrail must check student-level opt-out state \u2014 every other rule turns on the query/role/purpose alone."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "escalate"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "Directory information may be disclosed only after the agency has given public notice to parents and eligible students of the categories designated, the right to refuse such designation, and the time window to opt out."
+          },
+          {
+            "id": "ferpa-99.37-a-opt-out",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.37",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.37-a-opt-out-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.37(a)(2) + \u00a7 99.37(b). When the student has opted out, the guardrail must block the directory disclosure path entirely; opt-outs persist past enrollment."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "A parent or eligible student has the right to refuse to let the agency designate any or all categories of information about the student as directory information; valid opt-outs must be honored, even after enrollment ends (until rescinded)."
+          },
+          {
+            "id": "ferpa-99.37-c",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.37",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.37-c-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.37(c). Narrowed opt-out \u2014 even an opt-out student must wear an ID badge if the institution has designated that as directory information."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "A directory-information opt-out CANNOT be used to prevent in-class disclosure of the student's name/identifier/institutional email, nor to prevent display of a designated ID card or badge."
+          },
+          {
+            "id": "ferpa-99.37-e",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/99.37",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "ferpa-99.37-e-stmt",
+                "name": "statement",
+                "prose": "\u00a7 99.37(e). Critical for AI systems: even directory data becomes PII when combined with non-directory identifiers; the guardrail blocks re-identification flows."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "FERPA"
+              }
+            ],
+            "title": "The institution may NOT disclose or confirm directory information without \u00a7 99.30 written consent if a student's SSN or other non-directory information is used alone or combined with other elements to identify the student or their records."
+          }
+        ],
+        "id": "ferpa",
+        "title": "FERPA"
+      },
+      {
+        "controls": [
+          {
+            "id": "tiv-668.34-a1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a1-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(1). Informational baseline; an advisor can explain the policy must be consistent and at least as strict as the non-aid policy."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "low"
+              }
+            ],
+            "title": "An institution's SAP policy must be at least as strict as the policy it applies to students who do not receive Title IV aid."
+          },
+          {
+            "id": "tiv-668.34-a3i",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a3i-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(3)(i). Defines when an evaluation happens; needed before any status (warning/probation/termination) can be assessed."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "definition"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "low"
+              }
+            ],
+            "title": "For programs of one academic year or shorter, SAP is evaluated at the end of each payment period."
+          },
+          {
+            "id": "tiv-668.34-a4ii",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a4ii-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(4)(ii). A concrete qualitative SAP threshold an advisor may be asked about; still institution-applied, not advisor-determined."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "definition"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "In a program longer than two academic years, by the end of the second academic year the student must have a GPA of at least a \"C\" (or equivalent) or academic standing consistent with graduation requirements."
+          },
+          {
+            "id": "tiv-668.34-maxtf",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-maxtf-stmt",
+                "name": "statement",
+                "prose": "668.34(b). The 150% rule; an advisor can state it, but applying it to a specific student's record is an institutional determination."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "definition"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "Maximum timeframe for an undergraduate credit-hour program is no longer than 150 percent of the published program length."
+          },
+          {
+            "id": "tiv-668.34-a7",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a7-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(7). Loss of aid eligibility is high-stakes and effectively irreversible for the payment period; route to a human (financial-aid office)."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "high"
+              }
+            ],
+            "title": "At each evaluation, a student who has not achieved the required GPA or pace is no longer eligible for Title IV aid (subject to warning/probation paths). An AI advisor must NOT confirm continued eligibility; this is a high-stakes institutional determination."
+          },
+          {
+            "id": "tiv-668.34-a8i",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a8i-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(8)(i). An advisor may explain warning status, but the status itself is assigned by the institution."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student on financial aid warning may continue to receive Title IV aid for one payment period despite a SAP determination, with no appeal required."
+          },
+          {
+            "id": "tiv-668.34-a8ii",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a8ii-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(8)(ii). Probation follows an appeal + reinstatement; an advisor can describe it but cannot grant it."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "exception"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student on financial aid probation may receive Title IV funds for one payment period and may be required to follow specific terms or an academic plan."
+          },
+          {
+            "id": "tiv-668.34-a9ii",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.34",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.34-a9ii-stmt",
+                "name": "statement",
+                "prose": "668.34(a)(9)(ii). An advisor can explain valid appeal bases; the appeal decision rests with the institution."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A SAP appeal may be based on the death of a relative, the student's injury or illness, or other special circumstances."
+          },
+          {
+            "id": "tiv-668.32-a1i",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-a1i-stmt",
+                "name": "statement",
+                "prose": "668.32(a)(1)(i). A core eligibility gate; an advisor can explain it but the eligibility determination is institutional/ED."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "To receive Title IV aid a student must be a regular student enrolled (or accepted for enrollment) in an eligible program at an eligible institution."
+          },
+          {
+            "id": "tiv-668.32-e1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-e1-stmt",
+                "name": "statement",
+                "prose": "668.32(e)(1). Eligibility gate; advisor-explainable, institution-determined."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student generally must have a high school diploma or its recognized equivalent to receive Title IV aid."
+          },
+          {
+            "id": "tiv-668.32-f",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-f-stmt",
+                "name": "statement",
+                "prose": "668.32(f). Ties eligibility to SAP; bridges the two encoded sections."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student must maintain SAP per the institution's published standards that meet 668.34 to remain eligible for Title IV aid."
+          },
+          {
+            "id": "tiv-668.32-g1",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-g1-stmt",
+                "name": "statement",
+                "prose": "668.32(g)(1). Default is a high-stakes eligibility bar with resolution paths that require human handling; not an automatable yes/no."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "block"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "high"
+              }
+            ],
+            "title": "A student in default on a Title IV loan is not eligible for further Title IV aid (absent a 668.35 exception). An AI advisor must NOT tell a student in default they are eligible; route to a human."
+          },
+          {
+            "id": "tiv-668.32-g2",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-g2-stmt",
+                "name": "statement",
+                "prose": "668.32(g)(2). Loan-limit bar; advisor-explainable, institution-resolved."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "prohibition"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student who has borrowed above annual or aggregate Title IV loan limits is not eligible for further such aid (absent a 668.35 exception)."
+          },
+          {
+            "id": "tiv-668.32-i",
+            "links": [
+              {
+                "href": "https://www.law.cornell.edu/cfr/text/34/668.32",
+                "rel": "reference"
+              }
+            ],
+            "parts": [
+              {
+                "id": "tiv-668.32-i-stmt",
+                "name": "statement",
+                "prose": "668.32(i). Eligibility gate; note this is non-directory PII under FERPA, linking the two frameworks."
+              }
+            ],
+            "props": [
+              {
+                "name": "rule-type",
+                "value": "permission"
+              },
+              {
+                "name": "severity",
+                "value": "warn"
+              },
+              {
+                "name": "framework",
+                "value": "Title IV"
+              },
+              {
+                "name": "risk-tier",
+                "value": "medium"
+              }
+            ],
+            "title": "A student generally must have a correct Social Security number to receive Title IV aid (narrow Pacific-territory exceptions aside)."
+          }
+        ],
+        "id": "title-iv",
+        "title": "Title IV"
+      }
+    ],
+    "metadata": {
+      "oscal-version": "1.1.2",
+      "title": "RegRails encoded rules (FERPA + Title IV subset)",
+      "version": "0.3.1"
+    },
+    "uuid": "03a8f7ae-fa56-5895-a356-ac88dae620ce"
+  }
+}
