@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# S6 — commit-msg gate for RegRails. Enforces two project rules at commit time:
+#
+#   1. Subject line MUST start with a capital letter (after any optional
+#      "type(scope): " Conventional-Commits prefix). Rejects a lowercase subject.
+#   2. The message MUST NOT contain any AI-attribution / co-authorship trailer.
+#      RegRails commits are authored SOLELY by Allen Byrd. No `Co-Authored-By`,
+#      no "Generated with", no "Co-authored-by: Claude", etc.
+#
+# Defense-in-depth: .gitignore + secret-scan.yml guard secrets; this guards the
+# commit message itself. Activate with: bash scripts/setup-githooks.sh
+#
+# Bypass (rare, deliberate): REGRAILS_COMMITMSG_BYPASS=1 git commit ...
+
+set -euo pipefail
+
+msg_file="$1"
+
+# --- Resolve the subject line: first non-empty, non-comment line. ---
+subject=""
+while IFS= read -r line; do
+  case "$line" in
+    \#*) continue ;;        # skip git comment lines
+    "") continue ;;          # skip blank lines
+    *) subject="$line"; break ;;
+  esac
+done < "$msg_file"
+
+fail() {
+  echo "commit-msg hook: $1" >&2
+  echo "  (bypass once with REGRAILS_COMMITMSG_BYPASS=1 if you are certain)" >&2
+  exit 1
+}
+
+if [ "${REGRAILS_COMMITMSG_BYPASS:-0}" = "1" ]; then
+  echo "commit-msg hook: BYPASSED via REGRAILS_COMMITMSG_BYPASS=1" >&2
+  exit 0
+fi
+
+# --- Rule 1: capitalized subject. ---
+# Strip an optional Conventional-Commits prefix ("feat:", "fix(scope):", etc.)
+# then require the first remaining character to be an uppercase letter.
+core="$subject"
+if printf '%s' "$subject" | grep -qE '^[a-z]+(\([^)]+\))?!?: '; then
+  core="$(printf '%s' "$subject" | sed -E 's/^[a-z]+(\([^)]+\))?!?: //')"
+fi
+
+if [ -z "$core" ]; then
+  fail "empty subject line."
+fi
+
+case "$core" in
+  [A-Z]*) : ;;  # ok — capitalized
+  *) fail "subject must start with a capital letter (got: '$subject')." ;;
+esac
+
+# --- Rule 2: no AI-attribution / co-authorship trailers, anywhere in the body. ---
+# Case-insensitive. Matches the forbidden phrasings Allen's CLAUDE.md bans.
+if grep -qiE 'co-authored-by:|co-author(ed)?[- ]by|generated with|🤖|noreply@anthropic\.com|with \[?claude' "$msg_file"; then
+  fail "AI-attribution / co-authorship trailer detected — RegRails commits are authored solely by Allen Byrd."
+fi
+
+exit 0

@@ -1,0 +1,113 @@
+# CLI <-> web parity manifest
+#
+# One row per LIVE Typer leaf command (walk: `regrails <group> <cmd>`, plus the
+# top-level `decide`). `scripts/check_parity.py` enforces three invariants:
+#
+#   1. COMPLETENESS  - every live CLI leaf appears here (a new command can't ship
+#                      un-triaged).
+#   2. REGISTRY      - every non-null `web` route exists in
+#                      web/src/routes/registry.tsx (a row can't claim a page that
+#                      isn't wired).
+#   3. DEBT-RATCHET  - the count of `status: cli-only` rows may not exceed
+#                      `cli_only_baseline` below (parity gaps can shrink, never grow).
+#
+# status values:
+#   full      - the CLI capability is reachable from a web route.
+#   web-only  - the web has a destination with no 1:1 CLI leaf behind it.
+#   cli-only  - a CLI leaf with no web equivalent (counted by the debt ratchet).
+#   exempt    - deliberately NOT hosted (live LLM/network or a long-running server
+#               process); reason is mandatory.
+#
+# Web routes are the SPA paths in web/src/routes/registry.tsx. The data each page
+# renders is generated from the package by scripts/gen_web_data.py (so a "full"
+# row means the same engine output is on the web, not a re-implementation).
+
+# Maximum allowed number of `status: cli-only` rows. Lower this (never raise it)
+# as parity gaps are closed; the gate fails if the live count exceeds it.
+cli_only_baseline: 1
+
+commands:
+  - cli: decide
+    web: "/"
+    status: full
+    reason: >-
+      The Live demo page POSTs to /api/decide, which runs the same deterministic
+      guardrail engine as `regrails decide`.
+
+  - cli: check faithfulness
+    web: /methodology
+    status: full
+    reason: >-
+      The Methodology page surfaces the faithfulness-gate result (37/37 rules
+      verbatim-or-threshold) produced by `regrails check faithfulness`.
+
+  - cli: encode list
+    web: /rules
+    status: full
+    reason: The Rules page lists every encoded rule, the table form of `encode list`.
+
+  - cli: encode verify
+    web: /rules
+    status: full
+    reason: >-
+      The Rules page renders the round-trip-validated rule set; `encode verify` is
+      the CLI form of the same structural load + citation/source_hash check.
+
+  - cli: research run
+    web: null
+    status: exempt
+    reason: >-
+      Runs live Perplexity Sonar streams via OpenRouter (needs an API key and
+      spends money). Intentionally not hosted on the public demo.
+
+  - cli: audit verify
+    web: /provenance
+    status: full
+    reason: >-
+      The Provenance page verifies the hash-chained decision log via /api/verify,
+      the same tamper-evidence check as `regrails audit verify`.
+
+  - cli: coverage report
+    web: /coverage
+    status: full
+    reason: The Coverage page is the rendered rule-to-scenario matrix from `coverage report`.
+
+  - cli: report html
+    web: null
+    status: cli-only
+    reason: >-
+      `report html` renders a self-contained static HTML decision report from
+      demo/recorded-runs. The React SPA supersedes it for the hosted experience,
+      so it is intentionally CLI-only (counted by the debt ratchet, not exempt).
+
+  - cli: mcp serve
+    web: null
+    status: exempt
+    reason: >-
+      Starts a long-running MCP stdio server (agent tool process) — not something
+      to host behind an HTTP route. The /mcp page DOCUMENTS the three tools; it
+      does not run the server.
+
+  - cli: export oscal
+    web: /exports
+    status: full
+    reason: The Exports page serves the OSCAL 1.1.2 catalog emitted by `export oscal`.
+
+  - cli: bench run
+    web: null
+    status: exempt
+    reason: >-
+      LIVE multi-model benchmark (queries GPT/Gemini/Grok/DeepSeek via OpenRouter,
+      needs an API key and spends money). Intentionally not hosted.
+
+  - cli: bench report
+    web: /benchmark
+    status: full
+    reason: >-
+      The Benchmark page renders the aggregated with/without-guardrail eval
+      (per-model rates, Wilson CIs, kappa) produced by `bench report`.
+
+# NOTE: `demo --all` is intentionally absent. There is no `demo` Typer command in
+# the live CLI tree (the demo is the `regrails.demo` module + the `/` Demo page,
+# not a registered leaf), so it cannot appear in the completeness walk. Listed here
+# only to record that it was checked and is exempt-by-nonexistence.
