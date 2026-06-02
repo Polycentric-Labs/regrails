@@ -1,0 +1,164 @@
+/*
+ * RegRails design tokens — extracted VERBATIM from the Evidentia web console
+ * design system (packages/evidentia-ui/src/index.css, "GUI v2" 2026-05-30):
+ * deep-navy brand chrome (nav rail + top bar), warm off-white workspace,
+ * federal-blue interactive primary, CLI-matched severity palette, IBM Plex.
+ *
+ * Differences from the Evidentia source: this app is plain CSS (no Tailwind),
+ * so the @theme/@apply layer is dropped. The HSL component values below are
+ * copied unchanged; primitives read them via hsl(var(--token)). Toggling the
+ * .dark class on <html> swaps the whole palette (see useTheme.ts / the no-FOUC
+ * script in index.html).
+ *
+ * HSL values are stored as bare components ("214 70% 38%") so opacity modifiers
+ * compose: hsl(var(--primary) / 0.5).
+ */
+
+/* ── Light tokens (default) ──────────────────────────────────────────── */
+:root {
+  --background: 40 28% 97.5%;
+  --foreground: 206 38% 13%;
+  --card: 0 0% 100%;
+  --card-foreground: 206 38% 13%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 206 38% 13%;
+  --primary: 214 70% 38%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 22% 96%;
+  --secondary-foreground: 206 38% 13%;
+  --muted: 40 22% 96%;
+  --muted-foreground: 210 11% 44%;
+  --accent: 214 52% 95%;
+  --accent-foreground: 214 70% 30%;
+  --destructive: 0 72% 46%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 158 64% 36%;
+  --warning: 38 92% 45%;
+  --border: 214 22% 89%;
+  --border-strong: 214 18% 80%;
+  --input: 214 20% 85%;
+  --ring: 214 70% 42%;
+  --radius: 0.625rem;
+
+  /* Deep-navy brand chrome — the nav rail + top bar. */
+  --chrome-bg: 206 44% 10%;
+  --chrome-bg-2: 207 46% 7.5%;
+  --chrome-fg: 40 32% 91%;
+  --chrome-fg-muted: 206 16% 64%;
+  --chrome-border: 206 28% 19%;
+  --chrome-hover: 206 34% 16%;
+  --chrome-active-bg: 206 38% 17%;
+  --cream: 40 56% 85%;
+  --cream-soft: 40 50% 90%;
+
+  /* Severity palette — CLI-matched hues (do not alter). */
+  --severity-critical: 0 84% 42%;
+  --severity-high: 14 88% 48%;
+  --severity-medium: 38 92% 47%;
+  --severity-low: 200 78% 44%;
+  --severity-informational: 215 14% 47%;
+
+  /* ── Prototype token aliases (same values, prototype names) ── */
+  --bg: var(--background);
+  --surface: var(--card);
+  --surface-2: var(--muted);
+  --fg: var(--foreground);
+  --fg-muted: var(--muted-foreground);
+  --fg-faint: 210 10% 58%;
+  --primary-strong: 214 74% 31%;
+  --primary-fg: var(--primary-foreground);
+  --accent-fg: var(--accent-foreground);
+  --destructive-fg: var(--destructive-foreground);
+  --sev-critical: var(--severity-critical);
+  --sev-high: var(--severity-high);
+  --sev-medium: var(--severity-medium);
+  --sev-low: var(--severity-low);
+  --sev-informational: var(--severity-informational);
+
+  --radius-sm-px: 0.4rem;
+  --shadow-sm: 0 1px 2px hsl(206 40% 12% / 0.05), 0 1px 1px hsl(206 40% 12% / 0.04);
+  --shadow-md: 0 4px 14px hsl(206 40% 12% / 0.07), 0 1px 3px hsl(206 40% 12% / 0.05);
+  --shadow-lg: 0 18px 48px hsl(206 44% 10% / 0.16);
+
+  --container: 1180px;
+
+  /* Density — baked "compact" default (matches the Evidentia prototype). */
+  --row-py: 0.34rem;
+  --cell-px: 0.7rem;
+  --card-pad: 1.05rem;
+
+  /*
+   * RegRails outcome + risk palette. These are the engine-semantic colors from
+   * the current web/index.html demo, promoted to tokens so outcomes.ts and the
+   * primitives reference one source. Stored as full hex (engine semantics are
+   * fixed, not theme-relative); dark mode lightens them below for contrast.
+   */
+  --outcome-allow: #1a7f37;
+  --outcome-block: #b91c1c;
+  --outcome-escalate-consent: #b45309;
+  --outcome-escalate-directory: #b45309;
+  --outcome-escalate-human: #7c3aed;
+  --outcome-insufficient: #6b7280;
+  --outcome-out-of-scope: #2563eb;
+  --risk-low: #1a7f37;
+  --risk-medium: #b45309;
+  --risk-high: #b91c1c;
+}
+
+/* ── Dark tokens ─────────────────────────────────────────────────────── */
+.dark {
+  --background: 207 36% 8%;
+  --foreground: 40 30% 92%;
+  --card: 206 30% 12%;
+  --card-foreground: 40 30% 92%;
+  --popover: 206 30% 12%;
+  --popover-foreground: 40 30% 92%;
+  --primary: 213 80% 62%;
+  --primary-foreground: 206 50% 7%;
+  --secondary: 206 26% 15.5%;
+  --secondary-foreground: 40 30% 92%;
+  --muted: 206 26% 15.5%;
+  --muted-foreground: 206 14% 62%;
+  --accent: 213 36% 20%;
+  --accent-foreground: 213 80% 74%;
+  --destructive: 0 74% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 158 56% 50%;
+  --warning: 38 92% 58%;
+  --border: 206 22% 20%;
+  --border-strong: 206 20% 27%;
+  --input: 206 22% 23%;
+  --ring: 213 80% 64%;
+
+  /* Chrome — only the surfaces that change in dark; fg/cream inherit. */
+  --chrome-bg: 207 46% 7%;
+  --chrome-bg-2: 208 48% 5%;
+  --chrome-border: 206 26% 17%;
+  --chrome-hover: 206 32% 13%;
+  --chrome-active-bg: 206 36% 15%;
+
+  --severity-critical: 0 78% 58%;
+  --severity-high: 14 86% 60%;
+  --severity-medium: 38 92% 58%;
+  --severity-low: 200 78% 60%;
+  --severity-informational: 215 16% 62%;
+
+  /* Prototype aliases that differ in dark. */
+  --fg-faint: 206 12% 50%;
+  --primary-strong: 213 84% 70%;
+  --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.3);
+  --shadow-md: 0 4px 16px hsl(0 0% 0% / 0.36);
+  --shadow-lg: 0 18px 48px hsl(0 0% 0% / 0.5);
+
+  /* Outcome + risk — lightened for legibility on the dark workspace. */
+  --outcome-allow: #2ea043;
+  --outcome-block: #f85149;
+  --outcome-escalate-consent: #d29922;
+  --outcome-escalate-directory: #d29922;
+  --outcome-escalate-human: #a371f7;
+  --outcome-insufficient: #8b949e;
+  --outcome-out-of-scope: #58a6ff;
+  --risk-low: #2ea043;
+  --risk-medium: #d29922;
+  --risk-high: #f85149;
+}

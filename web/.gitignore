@@ -1,0 +1,19 @@
+# Vite + React SPA build/dev artifacts (web/)
+node_modules/
+dist/
+*.local
+*.tsbuildinfo
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.DS_Store

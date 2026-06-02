@@ -1,0 +1,2 @@
+# Generated static JSON lands here (scripts/gen_web_data.py, task B1).
+# loadData(name) fetches /data/<name>.json from this directory.
