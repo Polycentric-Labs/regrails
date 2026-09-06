@@ -208,8 +208,8 @@ The thesis: regulations *are* code, and the primitives for representing them as 
 
 Apache-2.0. See [LICENSE](LICENSE).
 
-## AI assistance
+## AI Assistance
 
 This project was developed alongside AI platforms.
 
-Models used: Claude Opus 4.8, GPT-5.5, Gemini 3.1 Pro, Grok 4.3, DeepSeek, Perplexity Sonar (Deep Research + Pro)
+Details, including the tools used: [`docs/ai-assistance.md`](docs/ai-assistance.md).
