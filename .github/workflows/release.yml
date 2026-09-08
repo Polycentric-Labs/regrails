@@ -24,10 +24,10 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
         with:
           version: "0.11.6"
 
@@ -60,10 +60,10 @@ jobs:
     # NOTE: if the PyPI Trusted Publisher was registered with an Environment name,
     # add a matching `environment:` block here. Registered without one -> omit it.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
         with:
           version: "0.11.6"
 
@@ -74,9 +74,9 @@ jobs:
         run: uv build
 
       - name: SLSA build provenance (verify with `gh attestation verify`)
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@ef244123eb79f2f7a7e75d99086184180e6d0018 # v1
         with:
           subject-path: "dist/*"
 
       - name: Publish to PyPI (Trusted Publisher + PEP 740 attestations)
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # release/v1
